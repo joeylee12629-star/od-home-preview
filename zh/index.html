@@ -3318,7 +3318,7 @@ fetch('https://api.github.com/repos/nexu-io/open-design/releases/latest')
   .then(function(d){
     if(!d || !d.name) return;
     var m = ((d.body||'').split('\n')[0]).match(/[—-]\s*(.+?)\s*$/);
-    document.getElementById('od-rel').textContent = d.name + (m ? ' 「'+m[1]+'」' : '') + ' is out';
+    document.getElementById('od-rel').textContent = d.name + (m ? ' 「'+m[1]+'」' : '') + ' 已发布';
   }).catch(function(){});
 
 /* 原站底部 CTA 按钮文案统一 */

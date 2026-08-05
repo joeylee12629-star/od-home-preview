@@ -7,26 +7,25 @@
   --sans:'Albert Sans',-apple-system,'PingFang SC',sans-serif}
 html,body{height:100%}
 body{font-family:var(--sans);background:#fafafa;display:flex;overflow:hidden;color:var(--ink);font-size:12px}
-/* ── 列1:项目 ── */
-.projects{width:172px;flex:none;background:#f4f4f1;border-right:1px solid var(--line);padding:12px 10px;display:flex;flex-direction:column;gap:4px}
+.projects{width:176px;flex:none;background:#f4f4f1;border-right:1px solid var(--line);padding:12px 10px;display:flex;flex-direction:column;gap:4px;overflow-y:auto}
 .projects .hd{display:flex;align-items:center;gap:7px;padding:0 4px 10px}
-.projects .lg{width:17px;height:17px;border-radius:5px;background:var(--ink);position:relative;flex:none}
-.projects .lg::after{content:'';position:absolute;inset:4px 4px 4px 8px;background:var(--acid);border-radius:2px}
+.projects .hd img{width:18px;height:18px;border-radius:5px}
 .projects .hd b{font-size:11.5px;font-weight:800}
 .proj{display:flex;align-items:center;gap:8px;border-radius:9px;padding:8px 8px;cursor:pointer;transition:.15s;border:1px solid transparent}
 .proj:hover{background:#fff}
 .proj.on{background:#fff;border-color:#15140f1a;box-shadow:0 6px 14px -10px rgba(0,0,0,.15)}
-.proj .ic{width:26px;height:26px;border-radius:7px;flex:none;overflow:hidden;border:1px solid #15140f14}
+.proj .ic{width:26px;height:26px;border-radius:7px;flex:none;overflow:hidden;border:1px solid #15140f14;background:#fff}
 .proj .ic img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
-.proj .tx b{display:block;font-size:10.5px;font-weight:750;line-height:1.25}
-.proj .tx i{font-style:normal;font-size:8.5px;color:var(--mute);font-weight:650}
+.proj .tx{min-width:0}
+.proj .tx b{display:block;font-size:10.5px;font-weight:750;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proj .tx i{font-style:normal;font-size:8.5px;color:var(--mute);font-weight:650;white-space:nowrap}
 .proj.on .tx i{color:#218c00}
 .newp{margin-top:auto;border:1.5px dashed #15140f2b;border-radius:9px;padding:8px;text-align:center;
-  font-size:10px;font-weight:750;color:#595959;cursor:pointer}
+  font-size:10px;font-weight:750;color:#595959;cursor:pointer;flex:none}
 .newp:hover{border-color:#15140f55}
-/* ── 列2:对话 ── */
 .chat{width:248px;flex:none;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column}
 .chat .hd{display:flex;align-items:center;gap:7px;padding:12px 12px 8px;border-bottom:1px solid #f0f0ec}
+.chat .hd img{width:16px;height:16px;border-radius:4px}
 .chat .hd b{font-size:11.5px;font-weight:800}
 .chat .hd i{font-style:normal;margin-left:auto;font-size:9px;font-weight:750;color:#218c00;background:#63fe1326;border-radius:99px;padding:3px 8px}
 .log{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px}
@@ -51,16 +50,22 @@ body{font-family:var(--sans);background:#fafafa;display:flex;overflow:hidden;col
 .composer button{width:26px;height:26px;border-radius:99px;background:var(--ink);color:var(--acid);border:0;flex:none;
   font-weight:900;font-size:13px;cursor:pointer;transition:.15s}
 .composer button:hover{transform:translateY(-1px)}
-/* ── 列3:产物 ── */
 .stage{flex:1;position:relative;overflow:hidden;background:
   radial-gradient(circle at 18% 8%,#ffffff 0%,transparent 45%),
   repeating-linear-gradient(0deg,transparent 0 23px,#26262607 23px 24px),
   repeating-linear-gradient(90deg,transparent 0 23px,#26262607 23px 24px),#f0f0ed}
-.artwrap{position:absolute;inset:14px 14px 14px 14px;border-radius:12px;overflow:hidden;background:#fff;
+.artwrap{position:absolute;inset:14px;border-radius:12px;overflow:hidden;background:#fff;
   border:1px solid #15140f1f;box-shadow:0 30px 60px -32px rgba(20,20,15,.4);
   opacity:0;transform:scale(.97);filter:blur(8px);transition:.55s cubic-bezier(.23,1,.32,1)}
 .artwrap.in{opacity:1;transform:none;filter:none}
 .artwrap iframe{width:200%;height:200%;border:0;transform:scale(.5);transform-origin:0 0;display:block}
+/* 跟随悬停文字的编辑框 */
+#ebox{position:absolute;border:1.5px solid var(--acid);box-shadow:0 0 0 1px #15140f14;
+  opacity:0;pointer-events:none;z-index:6;transition:opacity .12s,left .08s linear,top .08s linear,width .08s linear,height .08s linear}
+#ebox i{position:absolute;width:7px;height:7px;background:var(--acid);border:1.5px solid #fff;font-style:normal}
+#ebox .c1{left:-4px;top:-4px}#ebox .c2{right:-4px;top:-4px}#ebox .c3{left:-4px;bottom:-4px}#ebox .c4{right:-4px;bottom:-4px}
+#ebox .tag{position:absolute;left:-1px;top:-22px;background:var(--acid);color:#0d2601;font-family:var(--sans);
+  font-size:9px;font-weight:800;border-radius:5px;padding:2px 8px;white-space:nowrap}
 .skel{position:absolute;inset:14px;border-radius:12px;background:#ffffffb0;overflow:hidden;opacity:0;transition:.3s;pointer-events:none;z-index:3}
 .skel.show{opacity:1}
 .skel::after{content:'';position:absolute;inset:0;transform:translateX(-100%);
@@ -69,26 +74,18 @@ body{font-family:var(--sans);background:#fafafa;display:flex;overflow:hidden;col
 .cap{position:absolute;left:22px;bottom:20px;z-index:5;background:#15140fd9;color:#fff;font-size:10px;
   font-weight:750;padding:6px 12px;border-radius:99px;backdrop-filter:blur(4px);pointer-events:none}
 .cap em{font-style:normal;color:var(--acid)}
-.editbox{position:absolute;left:14%;top:20%;width:44%;height:22%;border:1.5px solid var(--acid);
-  box-shadow:0 0 0 1px #15140f14;opacity:0;transition:opacity .18s;pointer-events:none;z-index:4}
-.editbox i{position:absolute;width:8px;height:8px;background:var(--acid);border:1.5px solid #fff;font-style:normal}
-.editbox .c1{left:-5px;top:-5px}.editbox .c2{right:-5px;top:-5px}.editbox .c3{left:-5px;bottom:-5px}.editbox .c4{right:-5px;bottom:-5px}
-.editbox .tag{position:absolute;left:-1px;top:-24px;background:var(--acid);color:#0d2601;font-family:var(--sans);
-  font-size:9.5px;font-weight:800;border-radius:5px;padding:3px 8px;white-space:nowrap}
-.editbox2{left:14%;top:50%;width:30%;height:13%}
-.editbox2 .tag{background:#15140f;color:#fff}
-.stage:hover .editbox{opacity:1}
 .edithint{position:absolute;right:22px;bottom:20px;z-index:5;background:#ffffffe6;border:1px solid #15140f1f;
   color:#434343;font-size:9.5px;font-weight:700;padding:5px 11px;border-radius:99px;opacity:0;transition:.2s;pointer-events:none}
 .stage:hover .edithint{opacity:1}
 @media (prefers-reduced-motion: reduce){.artwrap,.skel::after{transition:none;animation:none}}
 </style></head><body>
 <div class="projects">
-  <div class="hd"><img src="https://open-design.ai/android-chrome-192x192.png" alt="" style="width:18px;height:18px;border-radius:5px"><b>我的项目</b></div>
+  <div class="hd"><img src="https://open-design.ai/android-chrome-192x192.png" alt=""><b>我的项目</b></div>
   <div id="plist"></div>
-  <div class="newp">+ 新建项目</div></div>
+  <div class="newp">+ 新建项目</div>
+</div>
 <div class="chat">
-  <div class="hd"><img src="https://open-design.ai/android-chrome-192x192.png" alt="" style="width:16px;height:16px;border-radius:4px"><b>Open Design</b><i>智能体</i></div>
+  <div class="hd"><img src="https://open-design.ai/android-chrome-192x192.png" alt=""><b>Open Design</b><i>智能体</i></div>
   <div class="log" id="log"></div>
   <div class="composer">
     <input id="inp" type="text" placeholder="问 Open Design 任何事…" autocomplete="off">
@@ -97,60 +94,75 @@ body{font-family:var(--sans);background:#fafafa;display:flex;overflow:hidden;col
 </div>
 <div class="stage" id="stage">
   <div class="skel" id="skel"></div>
-  <div class="artwrap" id="aw"><iframe id="artframe" src="" title="Live artifact" sandbox="allow-scripts allow-same-origin"></iframe></div>
-  <span class="editbox"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><span class="tag">标题 · 可编辑</span></span>
-  <span class="editbox editbox2"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><span class="tag">正文 · 可编辑</span></span>
+  <div class="artwrap" id="aw">
+    <iframe id="artframe" src="" title="Live artifact" sandbox="allow-scripts allow-same-origin"></iframe>
+    <span id="ebox"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><span class="tag">editable</span></span>
+  </div>
   <span class="cap">实时产物 · <em id="capname"></em></span>
-  <span class="edithint">✎ 点击任意文字即可编辑</span>
+  <span class="edithint">✎ 悬停任意文字,点击即可编辑</span>
 </div>
 <script>
 var SCENES={
- slides:[
-  {name:'Q3 述职 Deck', sub:'演示 · 11 页', icon:'art/slides-1.png', cap:'真实 HTML deck,里面可用 ← → 翻页',
-   url:'live/html-ppt-pitch-deck/example.html',
-   prompt:'给 Brew & Co. 做 Q3 述职 deck,保持品牌一致。',
-   steps:['读取品牌内核','梳理叙事结构','排版标题页与数据页','渲染 11 页']},
-  {name:'杂志风 Deck', sub:'演示 · 编辑部风格', icon:'art/slides-2.png', cap:'真实 HTML deck',
-   url:'live/html-ppt-taste-editorial/example.html',
-   prompt:'品牌故事,做成杂志风 deck。',
-   steps:['读取品牌内核','搭建编辑部网格','排版跨页','渲染 deck']}],
- proto:[
-  {name:'产品落地页', sub:'Web · 可滚动', icon:'art/proto-1.png', cap:'真实页面,可滚动',
-   url:'live/dating-web/example.html',
-   prompt:'新产品落地页,同一套设计系统。',
-   steps:['读取产品 brief','搭建区块','撰写文案','输出预览']},
-  {name:'移动端 App', sub:'移动端 · 可点按', icon:'art/proto-3.png', cap:'真实移动端 UI',
+ web:[
+  {name:'奢华地产网站', sub:'Web · 电影感滚动', icon:'art2/velar.png', cap:'真实页面,可滚动',
+   url:'live/velar-luxury-real-estate/example.html',
+   prompt:'用 Open Design 做一个电影感的奢华地产网站,每个区块都保持品牌一致。',
+   steps:['读取品牌内核','确定视觉世界观','构建区块','输出预览']},
+  {name:'Open Design 官网', sub:'Web · 我们自己的站', icon:'art2/odland.png', cap:'Open Design 官网,用 Open Design 做的',
+   url:'live/open-design-landing/example.html',
+   prompt:'Open Design 官网落地页,由我们自己的设计系统生成。',
+   steps:['读取品牌内核','排布首屏与区块','撰写文案','输出预览']},
+  {name:'Cloud 预约页', sub:'Web · 转化页', icon:'art2/waitlist.png', cap:'真实页面,表单可试',
+   url:'live/waitlist-page/example.html',
+   prompt:'Open Design Cloud 内测的预约等候页。',
+   steps:['读取 campaign brief','组织卖点','接好表单','输出预览']}],
+ mobile:[
+  {name:'预订 App', sub:'移动端 · 可点按', icon:'art2/mobileapp.png', cap:'真实移动端 UI',
    url:'live/mobile-app/example.html',
-   prompt:'预订 App 移动端原型,同一套设计系统。',
+   prompt:'预订 App,移动优先,和网站同一套设计系统。',
    steps:['读取产品 brief','排布关键屏','构建组件','接好点按流转']},
-  {name:'Y2K 活动站', sub:'Web · campaign', icon:'art/proto-2.png', cap:'真实页面,可滚动',
-   url:'live/hps-y2k-chrome/example.html',
-   prompt:'这次上新做一个铬金属 Y2K 活动站。',
-   steps:['读取 campaign brief','确定视觉世界观','构建区块','输出预览']}],
- marketing:[
-  {name:'发布邮件', sub:'营销 · HTML 邮件', icon:'art/mkt-en.png', cap:'真实 HTML 邮件',
-   url:'live/email-marketing/example.html',
-   prompt:'发布通告邮件,按品牌来。',
-   steps:['读取 campaign brief','排布邮件区块','撰写文案','内联样式']},
-  {name:'Blog post', sub:'Marketing · article', icon:'art/slides-2.png', cap:'真实文章页',
-   url:'live/blog-post/example.html',
-   prompt:'发布博客,用我们的语气写。',
-   steps:['读取语气规则','梳理故事线','撰写文案','排版文章']}],
+  {name:'游戏化习惯 App', sub:'移动端 · 趣味', icon:'art2/gamified.png', cap:'真实移动端 UI',
+   url:'live/gamified-app/example.html',
+   prompt:'游戏化的习惯打卡 App 原型,保持品牌感。',
+   steps:['读取产品 brief','设计激励闭环','构建界面','接好点按流转']}],
+ poster:[
+  {name:'发布电子指南', sub:'营销 · 长图文', icon:'art2/eguide.png', cap:'真实 HTML 电子指南,可滚动',
+   url:'live/digital-eguide/example.html',
+   prompt:'Open Design 发布的电子指南,海报级排版。',
+   steps:['读取 campaign brief','合成主视觉','排版章节','导出指南']}],
+ slides:[
+  {name:'瑞士风 Pitch Deck', sub:'演示 · 国际主义风格', icon:'art2/swiss.png', cap:'真实 HTML deck,里面可用 ← → 翻页',
+   url:'live/deck-swiss-international/example.html',
+   prompt:'Open Design 的 pitch deck,瑞士国际主义排版。',
+   steps:['读取品牌内核','搭建网格','排版跨页','渲染 deck']},
+  {name:'祖母绿编辑部 Deck', sub:'演示 · 编辑部风', icon:'art2/emerald.png', cap:'真实 HTML deck,里面可用 ← → 翻页',
+   url:'live/fs-emerald-editorial/example.html',
+   prompt:'季度回顾 deck,祖母绿编辑部风格。',
+   steps:['读取品牌内核','梳理故事线','排版数据页','渲染 deck']},
+  {name:'归藏杂志风 Deck', sub:'演示 · 杂志风', icon:'art2/guizang.png', cap:'真实 HTML deck,里面可用 ← → 翻页',
+   url:'live/guizang-ppt/assets/example-slides.html',
+   prompt:'介绍 Open Design 的杂志风 deck。',
+   steps:['读取品牌内核','搭建编辑部网格','排版跨页','渲染 deck']}],
  video:[
-  {name:'发布片头 · 6s', sub:'视频 · HTML motion', icon:'art/video-2.png', cap:'HTML motion,正在实时播放',
+  {name:'光标 VFX 标题', sub:'视频 · HTML motion', icon:'art2/vfxcursor.png', cap:'HTML motion,正在实时播放',
+   url:'live/vt-vfx-text-cursor/index.html',
+   prompt:'Open Design 发布用的光标 VFX 文字片头。',
+   steps:['分镜:1 个场景','合成画面','制作文字动效','渲染预览']},
+  {name:'Bold Signal 标题卡', sub:'视频 · HTML motion', icon:'art2/boldsignal.png', cap:'HTML motion,正在实时播放',
+   url:'live/vt-frame-bold-signal/index.html',
+   prompt:'品牌色的 bold-signal 标题卡。',
+   steps:['分镜:1 个场景','合成画面','制作 signal 动效','渲染预览']},
+  {name:'漏光片头 · 6s', sub:'视频 · HTML motion', icon:'art/video-2.png', cap:'HTML motion,正在实时播放',
    url:'live/frame-light-leak-cinema/example.html',
    prompt:'6 秒发布片头,HTML motion,品牌色。',
-   steps:['分镜:1 个场景','合成画面','制作文字动效','渲染预览']},
-  {name:'故障风标题', sub:'视频 · HTML motion', icon:'art/video-1.png', cap:'HTML motion,正在实时播放',
-   url:'live/frame-glitch-title/example.html',
-   prompt:'预告片的故障风标题卡。',
-   steps:['分镜:1 个场景','合成画面','制作故障动效','渲染预览']}]
+   steps:['分镜:1 个场景','合成画面','制作文字动效','渲染预览']}]
 };
-var scene='slides', cur=0;
+var scene='web', cur=0;
 var plist=document.getElementById('plist');
 var log=document.getElementById('log'), inp=document.getElementById('inp'), send=document.getElementById('send');
 var skel=document.getElementById('skel'), aw=document.getElementById('aw'), fr=document.getElementById('artframe');
 var cap=document.getElementById('capname');
+var ebox=document.getElementById('ebox'), etag=ebox.querySelector('.tag');
 var timers=[];
 
 function el(cls, html){var d=document.createElement('div');d.className=cls;d.innerHTML=html;return d;}
@@ -165,16 +177,47 @@ function renderList(){
   });
 }
 
+/* 编辑框:跟随内层文档里被悬停的文字元素(含滚动跟随) */
+var lastEl=null;
+function hideBox(){ebox.style.opacity=0;lastEl=null;}
+function placeBox(t){
+  try{
+    var r=t.getBoundingClientRect(), S=0.5;
+    if(r.width<3||r.height<3||r.bottom<0||r.top*S>aw.clientHeight){hideBox();return;}
+    ebox.style.left=(r.left*S)+'px'; ebox.style.top=(r.top*S)+'px';
+    ebox.style.width=(r.width*S)+'px'; ebox.style.height=(r.height*S)+'px';
+    etag.textContent=t.tagName.toLowerCase()+' · 可编辑';
+    ebox.style.opacity=1;
+  }catch(e){hideBox();}
+}
+function bindEditTracking(){
+  var doc; try{doc=fr.contentDocument}catch(e){return}
+  if(!doc||!doc.body) return;
+  try{doc.designMode='on';}catch(e){}
+  doc.addEventListener('mousemove',function(e){
+    var t=e.target && e.target.closest ? e.target.closest('h1,h2,h3,h4,h5,h6,p,li,a,button,blockquote,figcaption,dt,dd,td,th,label,strong,em,b,span') : null;
+    if(t && t.textContent && t.textContent.trim().length>0){ lastEl=t; placeBox(t); }
+    else hideBox();
+  },true);
+  doc.addEventListener('scroll',function(){ if(lastEl) placeBox(lastEl); },true);
+  if(doc.documentElement) doc.documentElement.addEventListener('mouseleave',hideBox,true);
+}
+fr.addEventListener('load',function(){
+  bindEditTracking();
+  aw.classList.add('in'); skel.classList.remove('show');
+});
+
 function openProject(i){
   cur=i;
   renderList();
+  hideBox();
   timers.forEach(clearTimeout);timers=[];
   var P=SCENES[scene][i];
   log.innerHTML='';
   log.appendChild(el('mu', P.prompt));
   var sl=el('stepsline','');
   P.steps.forEach(function(st){var d=document.createElement('div');d.textContent=st;sl.appendChild(d);});
-  var rd=document.createElement('div');rd.className='ready';rd.textContent='✦ 产物已生成。点击任意处即可编辑。';
+  var rd=document.createElement('div');rd.className='ready';rd.textContent='✦ 产物已生成。悬停文字即可编辑。';
   sl.appendChild(rd);
   log.appendChild(sl);
   aw.classList.remove('in'); skel.classList.add('show');
@@ -189,13 +232,8 @@ function openProject(i){
   timers.push(setTimeout(function(){
     kids.forEach(function(x){x.className='ok show'});
     skel.classList.remove('show'); aw.classList.add('in'); rd.classList.add('show');
-    try{ fr.contentDocument.designMode='on'; }catch(e){}
   },t+160));
 }
-fr.addEventListener('load',function(){
-  try{ fr.contentDocument.designMode='on'; }catch(e){}
-  aw.classList.add('in'); skel.classList.remove('show');
-});
 
 window.addEventListener('message',function(e){
   if(e.data && e.data.scene && SCENES[e.data.scene]){ scene=e.data.scene; cur=0; openProject(0); }
@@ -210,7 +248,7 @@ function userSend(){
   log.appendChild(el('mu', v.replace(/[<>&]/g,'')));
   log.scrollTop=log.scrollHeight;
   setTimeout(function(){
-    var a=el('ma','这里是在线演示。<b>下载客户端去体验完整的功能</b> — 真实生成、编辑、导出都在客户端里。<br><span class="dlmini"><em>↓</em> Download free</span>');
+    var a=el('ma','这里是在线演示。<b>下载客户端去体验完整的功能</b>,真实生成、编辑、导出都在客户端里。<br><span class="dlmini"><em>↓</em> Download free</span>');
     log.appendChild(a);
     log.scrollTop=log.scrollHeight;
     a.querySelector('.dlmini').addEventListener('click',function(){ parent.postMessage('od-download','*'); });

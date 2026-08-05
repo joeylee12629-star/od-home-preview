@@ -139,21 +139,21 @@ var SCENES={
    url:'live/fs-emerald-editorial/example.html',
    prompt:'季度回顾 deck,祖母绿编辑部风格。',
    steps:['读取品牌内核','梳理故事线','排版数据页','渲染 deck']},
-  {name:'归藏杂志风 Deck', sub:'演示 · 杂志风', icon:'art2/guizang.png', cap:'真实 HTML deck,里面可用 ← → 翻页',
-   url:'live/guizang-ppt/assets/example-slides.html',
-   prompt:'介绍 Open Design 的杂志风 deck。',
+  {name:'归藏杂志风 Deck', sub:'演示 · 杂志风', icon:'art2/guizang.png', cap:'真实 HTML deck,可滚动跨页',
+   url:'live/deck-guizang-editorial/example.html',
+   prompt:'Open Design 年度营销规划 deck,归藏杂志风。',
    steps:['读取品牌内核','搭建编辑部网格','排版跨页','渲染 deck']}],
  video:[
   {name:'光标 VFX 标题', sub:'视频 · HTML motion', icon:'art2/vfxcursor.png', cap:'HTML motion,正在实时播放',
-   url:'live/vt-vfx-text-cursor/index.html',
+   vw:1920, vh:1080, url:'live/vt-vfx-text-cursor/index.html',
    prompt:'Open Design 发布用的光标 VFX 文字片头。',
    steps:['分镜:1 个场景','合成画面','制作文字动效','渲染预览']},
   {name:'Bold Signal 标题卡', sub:'视频 · HTML motion', icon:'art2/boldsignal.png', cap:'HTML motion,正在实时播放',
-   url:'live/vt-frame-bold-signal/index.html',
+   vw:1920, vh:1080, url:'live/vt-frame-bold-signal/index.html',
    prompt:'品牌色的 bold-signal 标题卡。',
    steps:['分镜:1 个场景','合成画面','制作 signal 动效','渲染预览']},
   {name:'漏光片头 · 6s', sub:'视频 · HTML motion', icon:'art/video-2.png', cap:'HTML motion,正在实时播放',
-   url:'live/frame-light-leak-cinema/example.html',
+   vw:1920, vh:1080, url:'live/frame-light-leak-cinema/example.html',
    prompt:'6 秒发布片头,HTML motion,品牌色。',
    steps:['分镜:1 个场景','合成画面','制作文字动效','渲染预览']}]
 };
@@ -178,14 +178,31 @@ function renderList(){
 }
 
 /* 编辑框:跟随内层文档里被悬停的文字元素(含滚动跟随) */
-var lastEl=null;
+var lastEl=null, curS=0.5, offX=0, offY=0;
+function fitFrame(P){
+  if(P && P.vw){
+    var W=aw.clientWidth, H=aw.clientHeight;
+    var sc=Math.min(W/P.vw, H/P.vh);
+    fr.style.width=P.vw+'px'; fr.style.height=P.vh+'px';
+    offX=(W-P.vw*sc)/2; offY=(H-P.vh*sc)/2; curS=sc;
+    fr.style.transformOrigin='0 0';
+    fr.style.transform='translate('+offX+'px,'+offY+'px) scale('+sc+')';
+  }else{
+    fr.style.width='200%'; fr.style.height='200%';
+    fr.style.transformOrigin='0 0'; fr.style.transform='scale(.5)';
+    curS=0.5; offX=0; offY=0;
+  }
+}
+window.addEventListener('resize',function(){ fitFrame(SCENES[scene][cur]); });
 function hideBox(){ebox.style.opacity=0;lastEl=null;}
 function placeBox(t){
   try{
-    var r=t.getBoundingClientRect(), S=0.5;
-    if(r.width<3||r.height<3||r.bottom<0||r.top*S>aw.clientHeight){hideBox();return;}
-    ebox.style.left=(r.left*S)+'px'; ebox.style.top=(r.top*S)+'px';
-    ebox.style.width=(r.width*S)+'px'; ebox.style.height=(r.height*S)+'px';
+    var r=t.getBoundingClientRect();
+    if(r.width<3||r.height<3||r.bottom<0){hideBox();return;}
+    var L=offX+r.left*curS, T=offY+r.top*curS;
+    if(T>aw.clientHeight||L>aw.clientWidth){hideBox();return;}
+    ebox.style.left=L+'px'; ebox.style.top=T+'px';
+    ebox.style.width=(r.width*curS)+'px'; ebox.style.height=(r.height*curS)+'px';
     etag.textContent=t.tagName.toLowerCase()+' · 可编辑';
     ebox.style.opacity=1;
   }catch(e){hideBox();}
@@ -221,6 +238,7 @@ function openProject(i){
   sl.appendChild(rd);
   log.appendChild(sl);
   aw.classList.remove('in'); skel.classList.add('show');
+  fitFrame(P);
   fr.src=P.url; cap.textContent=P.cap;
   var kids=sl.querySelectorAll('div:not(.ready)');
   var t=200;

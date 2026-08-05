@@ -139,21 +139,21 @@ var SCENES={
    url:'live/fs-emerald-editorial/example.html',
    prompt:'Quarterly review deck, emerald editorial look.',
    steps:['Reading brand kernel','Outlining the story','Laying out data pages','Rendering deck']},
-  {name:'Guizang editorial deck', sub:'Slides · magazine', icon:'art2/guizang.png', cap:'real HTML deck, use ← → inside',
-   url:'live/guizang-ppt/assets/example-slides.html',
-   prompt:'An editorial magazine-style deck introducing Open Design.',
+  {name:'Guizang editorial deck', sub:'Slides · magazine', icon:'art2/guizang.png', cap:'real HTML deck, scroll the spreads',
+   url:'live/deck-guizang-editorial/example.html',
+   prompt:'The Open Design annual marketing plan, guizang editorial style.',
    steps:['Reading brand kernel','Setting editorial grid','Typesetting spreads','Rendering deck']}],
  video:[
   {name:'Cursor-VFX title', sub:'Video · HTML motion', icon:'art2/vfxcursor.png', cap:'HTML motion, playing live',
-   url:'live/vt-vfx-text-cursor/index.html',
+   vw:1920, vh:1080, url:'live/vt-vfx-text-cursor/index.html',
    prompt:'A cursor-VFX type intro for the Open Design launch.',
    steps:['Storyboard: 1 scene','Compositing frame','Animating type','Rendering preview']},
   {name:'Bold signal card', sub:'Video · HTML motion', icon:'art2/boldsignal.png', cap:'HTML motion, playing live',
-   url:'live/vt-frame-bold-signal/index.html',
+   vw:1920, vh:1080, url:'live/vt-frame-bold-signal/index.html',
    prompt:'A bold-signal title card in brand colors.',
    steps:['Storyboard: 1 scene','Compositing frame','Animating signal','Rendering preview']},
   {name:'Light-leak film · 6s', sub:'Video · HTML motion', icon:'art/video-2.png', cap:'HTML motion, playing live',
-   url:'live/frame-light-leak-cinema/example.html',
+   vw:1920, vh:1080, url:'live/frame-light-leak-cinema/example.html',
    prompt:'A 6-second launch title, HTML motion in brand colors.',
    steps:['Storyboard: 1 scene','Compositing frame','Animating type','Rendering preview']}]
 };
@@ -178,14 +178,31 @@ function renderList(){
 }
 
 /* 编辑框:跟随内层文档里被悬停的文字元素(含滚动跟随) */
-var lastEl=null;
+var lastEl=null, curS=0.5, offX=0, offY=0;
+function fitFrame(P){
+  if(P && P.vw){
+    var W=aw.clientWidth, H=aw.clientHeight;
+    var sc=Math.min(W/P.vw, H/P.vh);
+    fr.style.width=P.vw+'px'; fr.style.height=P.vh+'px';
+    offX=(W-P.vw*sc)/2; offY=(H-P.vh*sc)/2; curS=sc;
+    fr.style.transformOrigin='0 0';
+    fr.style.transform='translate('+offX+'px,'+offY+'px) scale('+sc+')';
+  }else{
+    fr.style.width='200%'; fr.style.height='200%';
+    fr.style.transformOrigin='0 0'; fr.style.transform='scale(.5)';
+    curS=0.5; offX=0; offY=0;
+  }
+}
+window.addEventListener('resize',function(){ fitFrame(SCENES[scene][cur]); });
 function hideBox(){ebox.style.opacity=0;lastEl=null;}
 function placeBox(t){
   try{
-    var r=t.getBoundingClientRect(), S=0.5;
-    if(r.width<3||r.height<3||r.bottom<0||r.top*S>aw.clientHeight){hideBox();return;}
-    ebox.style.left=(r.left*S)+'px'; ebox.style.top=(r.top*S)+'px';
-    ebox.style.width=(r.width*S)+'px'; ebox.style.height=(r.height*S)+'px';
+    var r=t.getBoundingClientRect();
+    if(r.width<3||r.height<3||r.bottom<0){hideBox();return;}
+    var L=offX+r.left*curS, T=offY+r.top*curS;
+    if(T>aw.clientHeight||L>aw.clientWidth){hideBox();return;}
+    ebox.style.left=L+'px'; ebox.style.top=T+'px';
+    ebox.style.width=(r.width*curS)+'px'; ebox.style.height=(r.height*curS)+'px';
     etag.textContent=t.tagName.toLowerCase()+' · editable';
     ebox.style.opacity=1;
   }catch(e){hideBox();}
@@ -221,6 +238,7 @@ function openProject(i){
   sl.appendChild(rd);
   log.appendChild(sl);
   aw.classList.remove('in'); skel.classList.add('show');
+  fitFrame(P);
   fr.src=P.url; cap.textContent=P.cap;
   var kids=sl.querySelectorAll('div:not(.ready)');
   var t=200;

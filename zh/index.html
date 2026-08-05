@@ -499,6 +499,8 @@
 <style id="od-redesign">
 /* 原型里关掉站内下载引导弹窗(线上行为保留,由 Joey 决定去留) */
 .download-engagement-prompt,[data-download-engagement-prompt]{display:none !important}
+/* zh: 中文标题一律无衬线 */
+.cur-hero h1,.h2serif,.step h3,.frow h3,.cdx-copy h3,.story .q,.fcard h4,.bench h4,.quote .t3{font-family:var(--sans) !important;letter-spacing:-.015em;font-weight:800}
 /* 公告条 */
 .od-announce{position:relative;z-index:60;background:var(--coral,#63fe13);color:#0d2601;
   font-family:var(--sans);font-size:13.5px;font-weight:700;display:flex;align-items:center;

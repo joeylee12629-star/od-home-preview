@@ -146,18 +146,16 @@ var SCENES={
    prompt:'Open Design 年度营销规划 deck,归藏杂志风。',
    steps:['读取品牌内核','搭建编辑部网格','排版跨页','渲染 deck']}],
  video:[
-  {name:'光标 VFX 标题', sub:'视频 · HTML motion', icon:'art2/vfxcursor.png', cap:'HTML motion,正在实时播放',
-   vw:1920, vh:1080, url:'live/vt-vfx-text-cursor/index.html',
-   prompt:'Open Design 发布用的光标 VFX 文字片头。',
-   steps:['分镜:1 个场景','合成画面','制作文字动效','渲染预览']},
-  {name:'Bold Signal 标题卡', sub:'视频 · HTML motion', icon:'art2/boldsignal.png', cap:'HTML motion,正在实时播放',
-   vw:1920, vh:1080, url:'live/vt-frame-bold-signal/index.html',
-   prompt:'品牌色的 bold-signal 标题卡。',
-   steps:['分镜:1 个场景','合成画面','制作 signal 动效','渲染预览']},
-  {name:'漏光片头 · 6s', sub:'视频 · HTML motion', icon:'art/video-2.png', cap:'HTML motion,正在实时播放',
-   vw:1920, vh:1080, url:'live/frame-light-leak-cinema/example.html',
-   prompt:'6 秒发布片头,HTML motion,品牌色。',
-   steps:['分镜:1 个场景','合成画面','制作文字动效','渲染预览']}]
+  {name:'发布片 · 3 镜头', sub:'视频 · HTML motion', icon:'art2/vfxcursor.png', cap:'HTML motion,正在实时播放',
+   seq:['live/vt-vfx-text-cursor/index.html','live/frame-glitch-title/example.html','live/frame-logo-outro/example.html'],
+   vw:1920, vh:1080,
+   prompt:'Open Design 发布片,三个镜头:文字片头、故障标题、logo 收尾。',
+   steps:['分镜:3 个场景','合成画面','制作文字动效','渲染序列']},
+  {name:'Bold Signal · 3 镜头', sub:'视频 · HTML motion', icon:'art2/boldsignal.png', cap:'HTML motion,正在实时播放',
+   seq:['live/vt-frame-bold-signal/index.html','live/frame-light-leak-cinema/example.html','live/frame-logo-outro/example.html'],
+   vw:1920, vh:1080,
+   prompt:'品牌色的 bold-signal 预告:signal 卡、电影标题、logo 收尾。',
+   steps:['分镜:3 个场景','合成画面','制作 signal 动效','渲染序列']}]
 };
 var scene='web', cur=0;
 var plist=document.getElementById('plist');
@@ -184,7 +182,7 @@ var lastEl=null, curS=0.5, offX=0, offY=0;
 function fitFrame(P){
   if(P && P.vw){
     var W=aw.clientWidth, H=aw.clientHeight;
-    var sc=Math.min(W/P.vw, H/P.vh);
+    var sc=Math.max(W/P.vw, H/P.vh);
     fr.style.width=P.vw+'px'; fr.style.height=P.vh+'px';
     offX=(W-P.vw*sc)/2; offY=(H-P.vh*sc)/2; curS=sc;
     fr.style.transformOrigin='0 0';
@@ -236,10 +234,22 @@ fr.addEventListener('load',function(){
   aw.classList.add('in'); skel.classList.remove('show');
 });
 
+var seqTimer=null, seqIdx=0;
+function startSeq(P){
+  if(seqTimer){clearInterval(seqTimer);seqTimer=null;}
+  if(!P.seq || P.seq.length<2) return;
+  seqIdx=0;
+  seqTimer=setInterval(function(){
+    seqIdx=(seqIdx+1)%P.seq.length;
+    aw.classList.remove('in');
+    setTimeout(function(){ fr.src=P.seq[seqIdx]; },260);
+  },4500);
+}
 function openProject(i){
   cur=i;
   renderList();
   hideBox();
+  if(seqTimer){clearInterval(seqTimer);seqTimer=null;}
   timers.forEach(clearTimeout);timers=[];
   var P=SCENES[scene][i];
   log.innerHTML='';
@@ -251,7 +261,7 @@ function openProject(i){
   log.appendChild(sl);
   aw.classList.remove('in'); skel.classList.add('show');
   fitFrame(P);
-  fr.src=P.url; cap.textContent=P.cap;
+  fr.src=(P.seq? P.seq[0] : P.url); cap.textContent=P.cap;
   var kids=sl.querySelectorAll('div:not(.ready)');
   var t=200;
   kids.forEach(function(st,k){
@@ -262,6 +272,7 @@ function openProject(i){
   timers.push(setTimeout(function(){
     kids.forEach(function(x){x.className='ok show'});
     skel.classList.remove('show'); aw.classList.add('in'); rd.classList.add('show');
+    startSeq(P);
   },t+160));
 }
 

@@ -146,18 +146,16 @@ var SCENES={
    prompt:'The Open Design annual marketing plan, guizang editorial style.',
    steps:['Reading brand kernel','Setting editorial grid','Typesetting spreads','Rendering deck']}],
  video:[
-  {name:'Cursor-VFX title', sub:'Video · HTML motion', icon:'art2/vfxcursor.png', cap:'HTML motion, playing live',
-   vw:1920, vh:1080, url:'live/vt-vfx-text-cursor/index.html',
-   prompt:'A cursor-VFX type intro for the Open Design launch.',
-   steps:['Storyboard: 1 scene','Compositing frame','Animating type','Rendering preview']},
-  {name:'Bold signal card', sub:'Video · HTML motion', icon:'art2/boldsignal.png', cap:'HTML motion, playing live',
-   vw:1920, vh:1080, url:'live/vt-frame-bold-signal/index.html',
-   prompt:'A bold-signal title card in brand colors.',
-   steps:['Storyboard: 1 scene','Compositing frame','Animating signal','Rendering preview']},
-  {name:'Light-leak film · 6s', sub:'Video · HTML motion', icon:'art/video-2.png', cap:'HTML motion, playing live',
-   vw:1920, vh:1080, url:'live/frame-light-leak-cinema/example.html',
-   prompt:'A 6-second launch title, HTML motion in brand colors.',
-   steps:['Storyboard: 1 scene','Compositing frame','Animating type','Rendering preview']}]
+  {name:'Launch film · 3 scenes', sub:'Video · HTML motion', icon:'art2/vfxcursor.png', cap:'HTML motion, playing live',
+   seq:['live/vt-vfx-text-cursor/index.html','live/frame-glitch-title/example.html','live/frame-logo-outro/example.html'],
+   vw:1920, vh:1080,
+   prompt:'A three-scene launch film for Open Design: type intro, glitch title, logo outro.',
+   steps:['Storyboard: 3 scenes','Compositing frames','Animating type','Rendering sequence']},
+  {name:'Bold signal · 3 scenes', sub:'Video · HTML motion', icon:'art2/boldsignal.png', cap:'HTML motion, playing live',
+   seq:['live/vt-frame-bold-signal/index.html','live/frame-light-leak-cinema/example.html','live/frame-logo-outro/example.html'],
+   vw:1920, vh:1080,
+   prompt:'A bold-signal teaser in brand colors: signal card, cinema title, logo outro.',
+   steps:['Storyboard: 3 scenes','Compositing frames','Animating signal','Rendering sequence']}]
 };
 var scene='web', cur=0;
 var plist=document.getElementById('plist');
@@ -184,7 +182,7 @@ var lastEl=null, curS=0.5, offX=0, offY=0;
 function fitFrame(P){
   if(P && P.vw){
     var W=aw.clientWidth, H=aw.clientHeight;
-    var sc=Math.min(W/P.vw, H/P.vh);
+    var sc=Math.max(W/P.vw, H/P.vh);
     fr.style.width=P.vw+'px'; fr.style.height=P.vh+'px';
     offX=(W-P.vw*sc)/2; offY=(H-P.vh*sc)/2; curS=sc;
     fr.style.transformOrigin='0 0';
@@ -236,10 +234,22 @@ fr.addEventListener('load',function(){
   aw.classList.add('in'); skel.classList.remove('show');
 });
 
+var seqTimer=null, seqIdx=0;
+function startSeq(P){
+  if(seqTimer){clearInterval(seqTimer);seqTimer=null;}
+  if(!P.seq || P.seq.length<2) return;
+  seqIdx=0;
+  seqTimer=setInterval(function(){
+    seqIdx=(seqIdx+1)%P.seq.length;
+    aw.classList.remove('in');
+    setTimeout(function(){ fr.src=P.seq[seqIdx]; },260);
+  },4500);
+}
 function openProject(i){
   cur=i;
   renderList();
   hideBox();
+  if(seqTimer){clearInterval(seqTimer);seqTimer=null;}
   timers.forEach(clearTimeout);timers=[];
   var P=SCENES[scene][i];
   log.innerHTML='';
@@ -251,7 +261,7 @@ function openProject(i){
   log.appendChild(sl);
   aw.classList.remove('in'); skel.classList.add('show');
   fitFrame(P);
-  fr.src=P.url; cap.textContent=P.cap;
+  fr.src=(P.seq? P.seq[0] : P.url); cap.textContent=P.cap;
   var kids=sl.querySelectorAll('div:not(.ready)');
   var t=200;
   kids.forEach(function(st,k){
@@ -262,6 +272,7 @@ function openProject(i){
   timers.push(setTimeout(function(){
     kids.forEach(function(x){x.className='ok show'});
     skel.classList.remove('show'); aw.classList.add('in'); rd.classList.add('show');
+    startSeq(P);
   },t+160));
 }
 

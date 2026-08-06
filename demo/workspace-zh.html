@@ -211,8 +211,18 @@ function bindEditTracking(){
   var doc; try{doc=fr.contentDocument}catch(e){return}
   if(!doc||!doc.body) return;
   try{doc.designMode='on';}catch(e){}
+  function hasOwnText(n){
+    for(var c=n.firstChild;c;c=c.nextSibling){ if(c.nodeType===3 && c.nodeValue.trim()) return true; }
+    return false;
+  }
   doc.addEventListener('mousemove',function(e){
-    var t=e.target && e.target.closest ? e.target.closest('h1,h2,h3,h4,h5,h6,p,li,a,button,blockquote,figcaption,dt,dd,td,th,label,strong,em,b,span') : null;
+    var el=e.target;
+    if(!el || !el.closest){ hideBox(); return; }
+    var t=el.closest('h1,h2,h3,h4,h5,h6,p,li,a,button,blockquote,figcaption,dt,dd,td,th,label,strong,em,b,span');
+    if(!t){
+      var n=el;
+      for(var k=0;k<4 && n && n!==doc.body;k++){ if(hasOwnText(n)){ t=n; break; } n=n.parentElement; }
+    }
     if(t && t.textContent && t.textContent.trim().length>0){ lastEl=t; placeBox(t); }
     else hideBox();
   },true);

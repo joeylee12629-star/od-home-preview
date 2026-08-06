@@ -290,7 +290,7 @@ window.addEventListener('message',function(e){
   if(e.data && e.data.scene && SCENES[e.data.scene]){ scene=e.data.scene; cur=0; openProject(0); }
 });
 
-document.querySelector('.newp').addEventListener('click',function(){ parent.postMessage('od-download','*'); });
+
 
 function userSend(){
   var v=(inp.value||'').trim();

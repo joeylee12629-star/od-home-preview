@@ -3413,7 +3413,10 @@ if(hg){
   function goDownload(){ window.location.href='https://open-design.ai/download/'; }
   var ga=document.querySelector('.cur-getapp .gab');
   if(ga) ga.addEventListener('click',goDownload);
-  window.addEventListener('message',function(e){ if(e.data==='od-download') goDownload(); });
+  window.addEventListener('message',function(e){
+    if(e.data==='od-download') goDownload();
+    else if(e.data && typeof e.data.odScroll==='number') window.scrollBy({top:e.data.odScroll,behavior:'auto'});
+  });
   var wsf=document.querySelector('.cur-frame-ws iframe');
   document.querySelectorAll('.cur-tab').forEach(function(t){
     t.addEventListener('click',function(){

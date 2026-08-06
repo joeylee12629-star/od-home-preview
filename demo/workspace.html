@@ -213,6 +213,14 @@ function bindEditTracking(){
   var doc; try{doc=fr.contentDocument}catch(e){return}
   if(!doc||!doc.body) return;
   try{doc.designMode='on';}catch(e){}
+  doc.addEventListener('wheel',function(e){
+    var se=doc.scrollingElement||doc.documentElement;
+    var canScroll=se.scrollHeight-se.clientHeight>4;
+    var atTop=se.scrollTop<=0, atEnd=se.scrollTop+se.clientHeight>=se.scrollHeight-2;
+    if(!canScroll || (e.deltaY>0&&atEnd) || (e.deltaY<0&&atTop)){
+      parent.postMessage({odScroll:e.deltaY},'*');
+    }
+  },{passive:true});
   function hasOwnText(n){
     for(var c=n.firstChild;c;c=c.nextSibling){ if(c.nodeType===3 && c.nodeValue.trim()) return true; }
     return false;
@@ -312,6 +320,17 @@ stageEl.addEventListener('mouseleave',function(){
   ehint.textContent='✎ Click the canvas to interact';
   hideBox();
 });
+
+/* 画面外暂停:整个 demo 不在视口时隐藏 iframe,停掉重绘 */
+if('IntersectionObserver' in window){
+  var vio=new IntersectionObserver(function(en){
+    var vis=en[0].isIntersecting;
+    fr.style.visibility=vis?'visible':'hidden';
+    if(!vis && seqTimer){clearInterval(seqTimer);seqTimer=null;}
+    else if(vis && !seqTimer){var P=SCENES[scene][cur]; if(P&&P.seq) startSeq(P);}
+  },{threshold:0});
+  vio.observe(document.body);
+}
 
 renderList();
 openProject(0);

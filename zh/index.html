@@ -499,6 +499,7 @@
 <style id="od-redesign">
 /* 原型里关掉站内下载引导弹窗(线上行为保留,由 Joey 决定去留) */
 .download-engagement-prompt,[data-download-engagement-prompt]{display:none !important}
+html.download-prompt-open,html.download-prompt-open body{overflow:auto !important;position:static !important}
 /* zh: 中文标题一律无衬线 */
 .cur-hero h1,.h2serif,.step h3,.frow h3,.cdx-copy h3,.story .q,.fcard h4,.bench h4,.quote .t3{font-family:var(--sans) !important;letter-spacing:-.015em;font-weight:800}
 /* 公告条 */
@@ -659,6 +660,8 @@ section.about,section.labs,section.method,section.tight,section.capabilities,sec
 .sec-cta small{font-family:var(--sans);font-size:11.5px;color:#8c8c8c;font-weight:600}
 .btn-dl-s{padding:11px 22px 11px 11px !important;font-size:14px !important}
 .btn-dl,.btn-dl-s{text-decoration:none !important}
+.btn-dl-s{animation:none !important}
+.btn-dl-s .sheen{display:none}
 .btn-dl-s .di{width:28px !important;height:28px !important;font-size:14px !important}
 /* 收尾区 Star 弱化 */
 section.cta .cta-actions a:not([data-download-cta]){background:transparent !important;border:1px solid #ffffff59 !important;
@@ -3340,6 +3343,12 @@ document.querySelectorAll('a[data-download-cta]:not([data-download-placement="na
 document.querySelectorAll('.rd-repo').forEach(function(x){x.addEventListener('click',function(){window.open('https://github.com/nexu-io/open-design','_blank');});});
 document.querySelectorAll('.rd-cdx').forEach(function(x){x.addEventListener('click',function(){window.open('https://open-design.ai/codex-plugin/','_blank');});});
 
+/* 原站下载弹窗脚本会锁滚动(弹窗已隐藏),摘掉锁类 */
+new MutationObserver(function(){
+  if(document.documentElement.classList.contains('download-prompt-open'))
+    document.documentElement.classList.remove('download-prompt-open');
+}).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
+
 /* 导航:Star 弱化 + 真合并 */
 var navCta=document.querySelector('.nav-cta');
 if(navCta) navCta.insertAdjacentHTML('beforebegin','<span class="od-nav-star">★ 83.8K</span>');
@@ -3408,7 +3417,7 @@ if(hg){
       ['copilot.svg','Copilot'],['deepseek.svg','DeepSeek'],['qwen.svg','Qwen'],['kimi.svg','Kimi'],['grok-build.svg','Grok'],
       ['opencode.svg','OpenCode'],['aider.png','Aider'],['trae-cli.png','Trae'],['devin.png','Devin'],['hermes.svg','Hermes'],
       ['kiro.svg','Kiro'],['kilo.svg','Kilo'],['qoder.svg','Qoder'],['vibe.svg','Mistral Vibe'],['antigravity.svg','Antigravity'],['pi.svg','Pi']];
-    var chips=AG.map(function(a){return '<a class="mq-chip" style="text-decoration:none" href="/agents/"><img src="/agent-icons/'+a[0]+'" alt="">'+a[1]+'</a>';}).join('');
+    var chips=AG.map(function(a){return '<span class="mq-chip"><img src="/agent-icons/'+a[0]+'" alt="">'+a[1]+'</span>';}).join('');
     return '<p class="mq-label">支持 <b>21 种 coding agent</b>,接入即用</p>'+
            '<div class="ag-marquee"><div class="mq-track">'+chips+chips+'</div></div>';
   })());

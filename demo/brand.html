@@ -32,7 +32,7 @@ body{font-family:var(--sans);background:#fafafa;color:#262626;display:flex;overf
 .voice li{list-style:none}
 .voice li::before{content:'· ';color:var(--grn);font-weight:800}
 /* 右侧:成品实时重算 */
-.arts{flex:1;background:
+.arts{flex:1;overflow:hidden;background:
   radial-gradient(circle at 20% 10%,#fff 0%,transparent 50%),
   repeating-linear-gradient(0deg,transparent 0 23px,#26262607 23px 24px),
   repeating-linear-gradient(90deg,transparent 0 23px,#26262607 23px 24px),#fafafa;overflow:auto}
@@ -142,5 +142,7 @@ document.querySelectorAll('#radii b').forEach(function(b){
     recalc();
   };
 });
+
+document.addEventListener('wheel',function(e){ parent.postMessage({odScroll:e.deltaY},'*'); },{passive:true});
 </script>
 </body></html>

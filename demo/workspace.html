@@ -332,6 +332,17 @@ if('IntersectionObserver' in window){
   vio.observe(document.body);
 }
 
+/* wsWheelRelay:空白区滚轮交还主页面 */
+document.addEventListener('wheel',function(e){
+  var sc=e.target.closest ? e.target.closest('.log,.projects') : null;
+  if(sc){
+    var can=sc.scrollHeight-sc.clientHeight>4;
+    var atTop=sc.scrollTop<=0, atEnd=sc.scrollTop+sc.clientHeight>=sc.scrollHeight-2;
+    if(can && !((e.deltaY>0&&atEnd)||(e.deltaY<0&&atTop))) return;
+  }
+  parent.postMessage({odScroll:e.deltaY},'*');
+},{passive:true});
+
 renderList();
 openProject(0);
 </script>

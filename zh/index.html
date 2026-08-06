@@ -3355,6 +3355,11 @@ if(navCta) navCta.insertAdjacentHTML('beforebegin','<span class="od-nav-star">�
     var sol=solLi.querySelector('.nav-dropdown');
     if(mega && sol){
       var anchorCol=mega.querySelector('.nav-mega-col-agent');
+      var pcol=document.createElement('div');
+      pcol.className='nav-mega-col od-merged-col';
+      pcol.innerHTML='<div class="nav-dropdown-group"><span class="nav-dropdown-group-label">Plugin</span></div>'+
+        '<li><a data-href="/codex-plugin/">Codex 插件</a></li>';
+      mega.insertBefore(pcol, anchorCol);
       var kids=[].slice.call(sol.children), col=null;
       kids.forEach(function(node){
         if(node.classList && node.classList.contains('nav-dropdown-group')){

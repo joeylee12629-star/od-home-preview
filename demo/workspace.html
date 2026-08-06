@@ -58,7 +58,9 @@ body{font-family:var(--sans);background:#fafafa;display:flex;overflow:hidden;col
   border:1px solid #15140f1f;box-shadow:0 30px 60px -32px rgba(20,20,15,.4);
   opacity:0;transform:scale(.97);filter:blur(8px);transition:.55s cubic-bezier(.23,1,.32,1)}
 .artwrap.in{opacity:1;transform:none;filter:none}
-.artwrap iframe{width:200%;height:200%;border:0;transform:scale(.5);transform-origin:0 0;display:block}
+.artwrap iframe{width:200%;height:200%;border:0;transform:scale(.5);transform-origin:0 0;display:block;pointer-events:none}
+body.live .artwrap iframe{pointer-events:auto}
+body.live .stage{outline:2px solid #63fe1355;outline-offset:-2px}
 /* 跟随悬停文字的编辑框 */
 #ebox{position:absolute;border:1.5px solid var(--acid);box-shadow:0 0 0 1px #15140f14;
   opacity:0;pointer-events:none;z-index:6;transition:opacity .12s,left .08s linear,top .08s linear,width .08s linear,height .08s linear}
@@ -99,7 +101,7 @@ body{font-family:var(--sans);background:#fafafa;display:flex;overflow:hidden;col
     <span id="ebox"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><span class="tag">editable</span></span>
   </div>
   <span class="cap">Live artifact · <em id="capname"></em></span>
-  <span class="edithint">✎ Hover any text, click to edit</span>
+  <span class="edithint" id="ehint">✎ Click the canvas to interact</span>
 </div>
 <script>
 var SCENES={
@@ -284,6 +286,19 @@ function userSend(){
 }
 send.addEventListener('click',userSend);
 inp.addEventListener('keydown',function(e){ if(e.key==='Enter') userSend(); });
+
+var stageEl=document.getElementById('stage'), ehint=document.getElementById('ehint');
+stageEl.addEventListener('click',function(){
+  if(!document.body.classList.contains('live')){
+    document.body.classList.add('live');
+    ehint.textContent='✎ Hover any text, click to edit';
+  }
+});
+stageEl.addEventListener('mouseleave',function(){
+  document.body.classList.remove('live');
+  ehint.textContent='✎ Click the canvas to interact';
+  hideBox();
+});
 
 renderList();
 openProject(0);

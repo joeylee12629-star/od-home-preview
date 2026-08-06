@@ -3324,7 +3324,10 @@ fetch('https://api.github.com/repos/nexu-io/open-design/releases/latest')
   }).catch(function(){});
 
 /* 原站底部 CTA 按钮文案统一 */
-document.querySelectorAll('section.cta a[data-download-cta], section.testimonial a[data-download-cta]').forEach(function(a){a.textContent='↓ Download free';});
+document.querySelectorAll('section.cta a[data-download-cta], section.testimonial a[data-download-cta]').forEach(function(a){
+  a.className='btn-dl btn-dl-s';
+  a.innerHTML='<em class="di">↓</em>Download free<u class="sheen"></u>';
+});
 
 document.querySelectorAll('.rd-repo').forEach(function(x){x.addEventListener('click',function(){window.open('https://github.com/nexu-io/open-design','_blank');});});
 document.querySelectorAll('.rd-cdx').forEach(function(x){x.addEventListener('click',function(){window.open('https://open-design.ai/codex-plugin/','_blank');});});

@@ -1100,18 +1100,26 @@
           .then((r) => (r.ok ? r.json() : Promise.reject(new Error('http error'))))
           .then((release) => {
             if (!release || typeof release.name !== 'string' || !release.name) return;
-            // Release notes open with "<version> — <codename>", but some
-            // releases run a full paragraph on that first line. Only take a
-            // short, clean codename; anything longer (or carrying markdown /
-            // links / sentence punctuation) is release prose, not a name.
-            const firstLine = String(release.body || '').split('\n')[0] || '';
-            const match = firstLine.match(/[—–-]\s*(.+?)\s*$/);
-            const candidate = match ? match[1].trim() : '';
-            const isCodename =
-              candidate.length > 0 &&
-              candidate.length <= 32 &&
-              !/[*_`<>|#]|https?:|[.:;]\s/.test(candidate);
-            const label = release.name + (isCodename ? ' 「' + candidate + '」' : '');
+            // A release title is "Open Design 0.18.1", sometimes with a
+            // codename after a dash — but some releases put a whole marketing
+            // sentence there (and the notes body opens the same way). Keep the
+            // version, and only append the tail when it reads like a codename:
+            // short, no markdown / links / sentence punctuation.
+            const isCodename = (value) =>
+              value.length > 0 && value.length <= 32 && !/[*_`<>|#]|https?:|[.:;,]/.test(value);
+            const splitTail = (value) => {
+              const parts = String(value).split(/\s[—–-]\s/);
+              return { head: (parts[0] || '').trim(), tail: parts.slice(1).join(' - ').trim() };
+            };
+            const fromName = splitTail(release.name);
+            const version = fromName.head || release.name.trim();
+            const bodyTail = splitTail(String(release.body || '').split('\n')[0] || '').tail;
+            const codename = isCodename(fromName.tail)
+              ? fromName.tail
+              : isCodename(bodyTail)
+                ? bodyTail
+                : '';
+            const label = version + (codename ? ' 「' + codename + '」' : '');
             slot.textContent = template.replace('{release}', label);
           })
           .catch(() => {});

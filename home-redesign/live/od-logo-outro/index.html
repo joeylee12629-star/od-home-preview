@@ -33,7 +33,10 @@
   /* shimmer */
   @keyframes shimmer { 0% { background-position:-200% 0 } 100% { background-position:200% 0 } }
   .shimmer {
-    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+    /* Opaque stops, not transparent: the sweep ends with the gradient
+       parked off-screen, so transparent stops left the wordmark
+       invisible once the animation finished (the scene loops here). */
+    background: linear-gradient(120deg, #f5f5f7 30%, #ffffff 50%, #f5f5f7 70%);
     background-size: 200% 100%;
     -webkit-background-clip:text; background-clip:text; color:transparent;
     animation: shimmer 1.8s ease-out 1.9s 1 both;

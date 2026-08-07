@@ -184,13 +184,18 @@ function renderList(){
 var lastEl=null, curS=0.5, offX=0, offY=0;
 function fitFrame(P){
   if(P && P.vw){
+    /* Film scenes are fixed 1920x1080 stages. Fit them WHOLE (contain, not
+       cover): the canvas is rarely 16:9, and cover silently cropped the
+       titles off both sides. The letterbox reads as a player. */
     var W=aw.clientWidth, H=aw.clientHeight;
-    var sc=Math.max(W/P.vw, H/P.vh);
+    var sc=Math.min(W/P.vw, H/P.vh);
     fr.style.width=P.vw+'px'; fr.style.height=P.vh+'px';
     offX=(W-P.vw*sc)/2; offY=(H-P.vh*sc)/2; curS=sc;
     fr.style.transformOrigin='0 0';
     fr.style.transform='translate('+offX+'px,'+offY+'px) scale('+sc+')';
+    aw.style.background='#0d0e10';
   }else{
+    aw.style.background='#fff';
     fr.style.width='200%'; fr.style.height='200%';
     fr.style.transformOrigin='0 0'; fr.style.transform='scale(.5)';
     curS=0.5; offX=0; offY=0;

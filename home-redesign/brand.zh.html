@@ -13,10 +13,26 @@ body{font-family:var(--sans);background:#fafafa;color:#262626;display:flex;overf
 .kernel{width:300px;flex:none;border-right:1px solid var(--line);background:#fff;overflow:hidden}
 .bname{font-weight:900;font-size:20px;letter-spacing:.02em}
 .bsub{font-size:10.5px;color:var(--mute);margin-top:2px}
-.tabs{display:flex;gap:6px;margin-top:4px}
-.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;
-  font-family:var(--sans);font-size:11px;font-weight:750;cursor:pointer;color:#595959}
+/* Switcher affordance: the tabs read as the demo's control surface, so they
+   carry a labelled cue, a resting pulse until first use, and hover/active
+   states strong enough to look clickable at a glance. */
+.trylabel{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:10px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--grn)}
+.trylabel i{font-style:normal;animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+.tabs{display:flex;gap:6px;margin-top:6px}
+.tabs button{border:1.5px solid #26262633;background:#fff;border-radius:999px;padding:8px 15px;
+  font-family:var(--sans);font-size:12px;font-weight:800;cursor:pointer;color:#434343;
+  transition:transform .15s,border-color .15s,background .15s,box-shadow .15s}
+.tabs button:hover{border-color:#262626;transform:translateY(-1px);box-shadow:0 6px 14px -8px rgba(38,38,38,.5)}
 .tabs button.on{background:#262626;color:#fff;border-color:#262626}
+body:not(.touched) .tabs button:not(.on){animation:tabpulse 2.2s ease-in-out infinite}
+body:not(.touched) .tabs button:nth-of-type(3){animation-delay:.4s}
+@keyframes tabpulse{0%,100%{box-shadow:0 0 0 0 rgba(99,254,19,0)}
+  50%{box-shadow:0 0 0 4px rgba(99,254,19,.35)}}
+@media (prefers-reduced-motion: reduce){
+  .trylabel i,.tabs button{animation:none !important}
+}
 .glabel{font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--grn);margin-top:6px}
 .sw-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .sw{border:1px solid var(--line);border-radius:8px;overflow:hidden}
@@ -27,8 +43,10 @@ body{font-family:var(--sans);background:#fafafa;color:#262626;display:flex;overf
 .spec .k{color:var(--mute)}
 .spec .v{font-weight:750}
 .radii{display:flex;gap:4px}
-.radii b{font-weight:700;font-size:11px;color:#8c8c8c;cursor:pointer;padding:2px 5px;border-radius:5px}
-.radii b.on{background:#26262614;color:#262626}
+.radii b{font-weight:750;font-size:11px;color:#595959;cursor:pointer;padding:3px 8px;border-radius:6px;
+  border:1px solid var(--line);background:#fff;transition:.15s}
+.radii b:hover{border-color:#262626;color:#262626}
+.radii b.on{background:#262626;color:#fff;border-color:#262626}
 .voice{font-size:10.5px;color:#595959;line-height:1.8}
 .voice li{list-style:none}
 .voice li::before{content:'· ';color:var(--grn);font-weight:800}
@@ -79,6 +97,7 @@ body{font-family:var(--sans);background:#fafafa;color:#262626;display:flex;overf
     <div class="bname" id="bn">SANDÍA</div>
     <div class="bsub" id="bs">唇釉品牌 · 颜色一处定死,全部重算。</div>
   </div>
+  <div class="trylabel"><i aria-hidden="true">↓</i>试一试 — 切换品牌</div>
   <div class="tabs">
     <button class="on" data-b="sandia">SANDÍA</button>
     <button data-b="ember">EMBER</button>
@@ -89,7 +108,7 @@ body{font-family:var(--sans);background:#fafafa;color:#262626;display:flex;overf
     <div class="sw"><i id="sw1" style="background:#63fe13"></i><span>主色</span></div>
     <div class="sw"><i id="sw2" style="background:#262626"></i><span>深色 · 文字与按钮</span></div>
   </div>
-  <div class="spec"><span class="k">圆角档位</span>
+  <div class="spec"><span class="k">圆角档位 <em style="font-style:normal;color:#218c00;font-weight:750">· 点一下</em></span>
     <span class="radii" id="radii"><b data-r="2">2</b><b data-r="4">4</b><b class="on" data-r="8">8</b><b data-r="12">12</b><b data-r="16">16</b></span></div>
   <div class="spec"><span class="k">字体</span><span class="v" id="fv">Albert Sans</span></div>
   <div class="glabel">C · 说话的规矩</div>
@@ -121,8 +140,10 @@ var BRANDS={
 };
 var rc=document.getElementById('rc'), t;
 function recalc(){rc.classList.add('show');clearTimeout(t);t=setTimeout(function(){rc.classList.remove('show')},1400);}
+document.addEventListener('pointerdown',function(){document.body.classList.add('touched');},{once:true});
 document.querySelectorAll('.tabs button').forEach(function(b){
   b.onclick=function(){
+    document.body.classList.add('touched');
     document.querySelectorAll('.tabs button').forEach(function(x){x.classList.remove('on')});
     b.classList.add('on');
     var br=BRANDS[b.dataset.b], r=document.documentElement.style;

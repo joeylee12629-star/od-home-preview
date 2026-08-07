@@ -39,8 +39,13 @@
     return first && codes.has(first) ? first : DEFAULT_LOCALE;
   };
 
+  const PREVIEW_BASE = '/od-home-preview';
+  const previewPath = () => {
+    const p = window.location.pathname;
+    return p.startsWith(PREVIEW_BASE) ? (p.slice(PREVIEW_BASE.length) || '/') : p;
+  };
   const basePathFromCurrent = () => {
-    const parts = window.location.pathname.split('/').filter(Boolean);
+    const parts = previewPath().split('/').filter(Boolean);
     if (parts[0] && isLocaleSegment(parts[0])) parts.shift();
     return parts.length > 0 ? `/${parts.join('/')}/` : '/';
   };
@@ -55,7 +60,7 @@
     const basePath = basePathFromCurrent();
     const nextPath =
       isCanonicalOnly() || locale === DEFAULT_LOCALE ? basePath : `/${locale}${basePath}`;
-    return `${nextPath}${window.location.search}${window.location.hash}`;
+    return `${PREVIEW_BASE}${nextPath}${window.location.search}${window.location.hash}`;
   };
 
   const persistLocale = (locale) => {

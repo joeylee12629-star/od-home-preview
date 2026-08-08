@@ -5,50 +5,50 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#262626;--mute:#8c8c8c;--line:#e7e7e3;--acid:#63fe13;
-  --sans:'Albert Sans',-apple-system,'PingFang SC',sans-serif}
+  --sans:'Albert Sans','PingFang SC','Microsoft YaHei',sans-serif}
 html,body{height:100%}
 body{font-family:var(--sans);background:#fafafa;display:flex;overflow:hidden;color:var(--ink);font-size:12px}
 .projects{width:176px;flex:none;background:#f4f4f1;border-right:1px solid var(--line);padding:12px 10px;display:flex;flex-direction:column;gap:4px;overflow-y:auto}
 .projects .hd{display:flex;align-items:center;gap:7px;padding:0 4px 10px}
-.projects .hd img{width:18px;height:18px;border-radius:5px}
+.projects .hd img{width:18px;height:18px;border-radius:6px}
 .projects .hd b{font-size:11.5px;font-weight:800}
-.proj{display:flex;align-items:center;gap:8px;border-radius:9px;padding:8px 8px;cursor:pointer;transition:.15s;border:1px solid transparent}
+.proj{display:flex;align-items:center;gap:8px;border-radius:8px;padding:8px 8px;cursor:pointer;transition:.15s;border:1px solid transparent}
 .proj:hover{background:#fff}
 .proj.on{background:#fff;border-color:#15140f1a;box-shadow:0 6px 14px -10px rgba(0,0,0,.15)}
-.proj .ic{width:26px;height:26px;border-radius:7px;flex:none;overflow:hidden;border:1px solid #15140f14;background:#fff}
+.proj .ic{width:26px;height:26px;border-radius:6px;flex:none;overflow:hidden;border:1px solid #15140f14;background:#fff}
 .proj .ic img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
 .proj .tx{min-width:0}
 .proj .tx b{display:block;font-size:10.5px;font-weight:750;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .proj .tx i{font-style:normal;font-size:8.5px;color:var(--mute);font-weight:650;white-space:nowrap}
-.proj.on .tx i{color:#218c00}
-.newp{margin-top:auto;border:1.5px dashed #15140f2b;border-radius:9px;padding:8px;text-align:center;
+.proj.on .tx i{color:#1e8000}
+.newp{margin-top:auto;border:1.5px dashed #15140f2b;border-radius:8px;padding:8px;text-align:center;
   font-size:10px;font-weight:750;color:#595959;cursor:pointer;flex:none}
 .newp:hover{border-color:#15140f55}
 .chat{width:248px;flex:none;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column}
 .chat .hd{display:flex;align-items:center;gap:7px;padding:12px 12px 8px;border-bottom:1px solid #f0f0ec}
-.chat .hd img{width:16px;height:16px;border-radius:4px}
+.chat .hd img{width:16px;height:16px;border-radius:6px}
 .chat .hd b{font-size:11.5px;font-weight:800}
-.chat .hd i{font-style:normal;margin-left:auto;font-size:9px;font-weight:750;color:#218c00;background:#63fe1326;border-radius:99px;padding:3px 8px}
+.chat .hd i{font-style:normal;margin-left:auto;font-size:9px;font-weight:750;color:#1e8000;background:#63fe1326;border-radius:999px;padding:3px 8px}
 .log{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px}
 .mu{align-self:flex-end;background:var(--ink);color:#fff;border-radius:12px 12px 3px 12px;padding:8px 10px;
   font-size:11px;line-height:1.5;max-width:92%}
 .ma{align-self:flex-start;background:#f4f4f1;border-radius:12px 12px 12px 3px;padding:8px 10px;font-size:11px;line-height:1.55;max-width:94%}
-.ma .dlmini{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:#fff;border-radius:99px;
+.ma .dlmini{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:#fff;border-radius:999px;
   padding:6px 12px;font-size:10px;font-weight:750;cursor:pointer;margin-top:7px}
 .ma .dlmini em{font-style:normal;color:var(--acid);display:inline-flex;align-items:center}
 .stepsline{align-self:flex-start;display:flex;flex-direction:column;gap:5px}
 .stepsline div{font-size:10px;color:var(--mute);opacity:0;transform:translateY(3px);transition:.3s;line-height:1.4}
 .stepsline div.show{opacity:1;transform:none}
-.stepsline div.ok::before{content:'✓ ';color:#218c00;font-weight:800}
-.stepsline div.run::before{content:'';display:inline-block;width:6px;height:6px;border-radius:99px;background:var(--acid);margin-right:6px;animation:pulse 1s infinite}
+.stepsline div.ok::before{content:'✓ ';color:#1e8000;font-weight:800}
+.stepsline div.run::before{content:'';display:inline-block;width:6px;height:6px;border-radius:999px;background:var(--acid);margin-right:6px;animation:pulse 1s infinite}
 @keyframes pulse{50%{opacity:.25}}
 .ready{font-size:10.5px;font-weight:750;opacity:0;transition:.3s}
 .ready.show{opacity:1}
 .composer{display:flex;align-items:center;gap:7px;border-top:1px solid #f0f0ec;padding:10px 11px}
-.composer input{flex:1;border:1.5px solid var(--line);border-radius:11px;padding:9px 11px;font-family:var(--sans);
+.composer input{flex:1;border:1.5px solid var(--line);border-radius:12px;padding:9px 11px;font-family:var(--sans);
   font-size:11px;outline:none;color:var(--ink);min-width:0}
 .composer input:focus{border-color:#26262666}
-.composer button{width:26px;height:26px;border-radius:99px;background:var(--ink);color:var(--acid);border:0;flex:none;
+.composer button{width:26px;height:26px;border-radius:999px;background:var(--ink);color:var(--acid);border:0;flex:none;
   display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
 .composer button:hover{transform:translateY(-1px)}
 .stage{flex:1;position:relative;overflow:hidden;background:
@@ -68,17 +68,28 @@ body.live .stage{outline:2px solid #63fe1355;outline-offset:-2px}
 #ebox i{position:absolute;width:7px;height:7px;background:var(--acid);border:1.5px solid #fff;font-style:normal}
 #ebox .c1{left:-4px;top:-4px}#ebox .c2{right:-4px;top:-4px}#ebox .c3{left:-4px;bottom:-4px}#ebox .c4{right:-4px;bottom:-4px}
 #ebox .tag{position:absolute;left:-1px;top:-22px;background:var(--acid);color:#0d2601;font-family:var(--sans);
-  font-size:9px;font-weight:800;border-radius:5px;padding:2px 8px;white-space:nowrap}
+  font-size:9px;font-weight:800;border-radius:6px;padding:2px 8px;white-space:nowrap}
 .skel{position:absolute;inset:14px;border-radius:12px;background:#ffffffb0;overflow:hidden;opacity:0;transition:.3s;pointer-events:none;z-index:3}
 .skel.show{opacity:1}
 .skel::after{content:'';position:absolute;inset:0;transform:translateX(-100%);
   background:linear-gradient(90deg,transparent,#ffffffd9,transparent);animation:shimmer 1.1s infinite}
 @keyframes shimmer{to{transform:translateX(100%)}}
+.sysbar{position:absolute;left:14px;right:14px;top:14px;z-index:6;display:flex;align-items:center;gap:9px;
+  background:#ffffffe8;backdrop-filter:blur(6px);border:1px solid #15140f1a;border-radius:999px;padding:6px 10px;
+  box-shadow:0 10px 24px -18px rgba(20,20,15,.45);overflow-x:auto;scrollbar-width:none}
+.sysbar::-webkit-scrollbar{display:none}
+.sysbar-label{flex:none;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1e8000}
+.sysbar-chips{display:flex;gap:6px}
+.sysbar-chips b{flex:none;font-weight:750;font-size:10px;color:#434343;background:#fff;border:1px solid #15140f1f;
+  border-radius:999px;padding:4px 10px;cursor:pointer;white-space:nowrap;transition:.15s}
+.sysbar-chips b:hover{border-color:#262626;color:#262626}
+.sysbar-chips b.on{background:#262626;border-color:#262626;color:#fff}
+.artwrap{top:56px}
 .cap{position:absolute;left:22px;bottom:20px;z-index:5;background:#15140fd9;color:#fff;font-size:10px;
-  font-weight:750;padding:6px 12px;border-radius:99px;backdrop-filter:blur(4px);pointer-events:none}
+  font-weight:750;padding:6px 12px;border-radius:999px;backdrop-filter:blur(4px);pointer-events:none}
 .cap em{font-style:normal;color:var(--acid)}
 .edithint{position:absolute;right:22px;bottom:20px;z-index:5;background:#ffffffe6;border:1px solid #15140f1f;
-  color:#434343;font-size:9.5px;font-weight:700;padding:5px 11px;border-radius:99px;opacity:0;transition:.2s;pointer-events:none}
+  color:#434343;font-size:9.5px;font-weight:700;padding:5px 11px;border-radius:999px;opacity:0;transition:.2s;pointer-events:none}
 .stage:hover .edithint{opacity:1}
 @media (max-width:760px){.projects{display:none}.chat{width:220px}}
 @media (max-width:560px){.chat{display:none}}
@@ -98,6 +109,7 @@ body.live .stage{outline:2px solid #63fe1355;outline-offset:-2px}
   </div>
 </div>
 <div class="stage" id="stage">
+  <div class="sysbar"><span class="sysbar-label">设计系统</span><span class="sysbar-chips" id="sysbar"></span></div>
   <div class="skel" id="skel"></div>
   <div class="artwrap" id="aw">
     <iframe id="artframe" src="" title="Live artifact" sandbox="allow-scripts allow-same-origin"></iframe>
@@ -109,52 +121,60 @@ body.live .stage{outline:2px solid #63fe1355;outline-offset:-2px}
 <script>
 var SCENES={
  web:[
-  {name:'奢华地产网站', sub:'Web · 电影感滚动', icon:'/od-home-preview/home-redesign/icons/velar.webp', cap:'真实页面,可滚动',
+  {name:'奢华地产网站', sub:'Web · 电影感滚动', style:'电影感奢品', icon:'/od-home-preview/home-redesign/icons/velar.webp', cap:'真实页面,可滚动',
    url:'/od-home-preview/plugins/example-velar-luxury-real-estate/example.html',
    prompt:'用 Open Design 做一个电影感的奢华地产网站,每个区块都保持品牌一致。',
    steps:['读取品牌内核','确定视觉世界观','构建区块','输出预览']},
-  {name:'Open Design 官网', sub:'Web · 我们自己的站', icon:'/od-home-preview/home-redesign/icons/odland.webp', cap:'Open Design 官网,用 Open Design 做的',
+  {name:'Open Design 官网', sub:'Web · 我们自己的站', style:'产品落地页', icon:'/od-home-preview/home-redesign/icons/odland.webp', cap:'Open Design 官网,用 Open Design 做的',
    url:'/od-home-preview/skills/open-design-landing/example.html',
    prompt:'Open Design 官网落地页,由我们自己的设计系统生成。',
    steps:['读取品牌内核','排布首屏与区块','撰写文案','输出预览']},
-  {name:'Cloud 预约页', sub:'Web · 转化页', icon:'/od-home-preview/home-redesign/icons/waitlist.webp', cap:'真实页面,表单可试',
+  {name:'Cloud 预约页', sub:'Web · 转化页', style:'转化页', icon:'/od-home-preview/home-redesign/icons/waitlist.webp', cap:'真实页面,表单可试',
    url:'/od-home-preview/skills/waitlist-page/example.html',
    prompt:'Open Design Cloud 内测的预约等候页。',
    steps:['读取 campaign brief','组织卖点','接好表单','输出预览']}],
  mobile:[
-  {name:'预订 App', sub:'移动端 · 可点按', icon:'/od-home-preview/home-redesign/icons/mobileapp.webp', cap:'真实移动端 UI',
+  {name:'预订 App', sub:'移动端 · 可点按', style:'简洁产品 UI', icon:'/od-home-preview/home-redesign/icons/mobileapp.webp', cap:'真实移动端 UI',
    url:'/od-home-preview/skills/mobile-app/example.html',
    prompt:'预订 App,移动优先,和网站同一套设计系统。',
    steps:['读取产品 brief','排布关键屏','构建组件','接好点按流转']},
-  {name:'游戏化习惯 App', sub:'移动端 · 趣味', icon:'/od-home-preview/home-redesign/icons/gamified.webp', cap:'真实移动端 UI',
+  {name:'游戏化习惯 App', sub:'移动端 · 趣味', style:'趣味游戏化', icon:'/od-home-preview/home-redesign/icons/gamified.webp', cap:'真实移动端 UI',
    url:'/od-home-preview/skills/gamified-app/example.html',
    prompt:'游戏化的习惯打卡 App 原型,保持品牌感。',
    steps:['读取产品 brief','设计激励闭环','构建界面','接好点按流转']}],
  poster:[
-  {name:'发布电子指南', sub:'营销 · 长图文', icon:'/od-home-preview/home-redesign/icons/eguide.webp', cap:'真实 HTML 电子指南,可滚动',
+  {name:'发布电子指南', sub:'营销 · 长图文', style:'长图文指南', icon:'/od-home-preview/home-redesign/icons/eguide.webp', cap:'真实 HTML 电子指南,可滚动',
    url:'/od-home-preview/skills/digital-eguide/example.html',
    prompt:'Open Design 发布的电子指南,海报级排版。',
-   steps:['读取 campaign brief','合成主视觉','排版章节','导出指南']}],
+   steps:['读取 campaign brief','合成主视觉','排版章节','导出指南']},
+  {name:'杂志风海报', sub:'营销 · 杂志感', style:'杂志编辑风', icon:'/od-home-preview/home-redesign/icons/eguide.webp', cap:'真实 HTML 海报',
+   url:'https://open-design.ai/skills/magazine-poster/example.html',
+   prompt:'一张杂志风的 Open Design 发布海报。',
+   steps:['读取品牌内核','定字体层级','排版跨页','导出海报']},
+  {name:'社媒轮播卡', sub:'营销 · 社媒', style:'社媒轮播', icon:'/od-home-preview/home-redesign/icons/eguide.webp', cap:'真实 HTML 轮播',
+   url:'https://open-design.ai/skills/social-carousel/example.html',
+   prompt:'一组三张的发布社媒轮播卡,保持品牌一致。',
+   steps:['读取活动 brief','排布卡片','撰写文案','导出轮播']}],
  slides:[
-  {name:'瑞士风 Pitch Deck', sub:'演示 · 国际主义风格', icon:'/od-home-preview/home-redesign/icons/swiss.webp', cap:'真实 HTML deck,里面可用 ← → 翻页',
+  {name:'瑞士风 Pitch Deck', sub:'演示 · 国际主义风格', style:'瑞士国际风', icon:'/od-home-preview/home-redesign/icons/swiss.webp', cap:'真实 HTML deck,里面可用 ← → 翻页',
    url:'/od-home-preview/plugins/example-deck-swiss-international/example.html',
    prompt:'Open Design 的 pitch deck,瑞士国际主义排版。',
    steps:['读取品牌内核','搭建网格','排版跨页','渲染 deck']},
-  {name:'祖母绿编辑部 Deck', sub:'演示 · 编辑部风', icon:'/od-home-preview/home-redesign/icons/emerald.webp', cap:'真实 HTML deck,里面可用 ← → 翻页',
+  {name:'祖母绿编辑部 Deck', sub:'演示 · 编辑部风', style:'祖母绿编辑风', icon:'/od-home-preview/home-redesign/icons/emerald.webp', cap:'真实 HTML deck,里面可用 ← → 翻页',
    url:'/od-home-preview/plugins/example-fs-emerald-editorial/example.html',
    prompt:'季度回顾 deck,祖母绿编辑部风格。',
    steps:['读取品牌内核','梳理故事线','排版数据页','渲染 deck']},
-  {name:'归藏杂志风 Deck', sub:'演示 · 杂志风', icon:'/od-home-preview/home-redesign/icons/guizang.webp', cap:'真实 HTML deck,可滚动跨页',
+  {name:'归藏杂志风 Deck', sub:'演示 · 杂志风', style:'贵藏杂志风', icon:'/od-home-preview/home-redesign/icons/guizang.webp', cap:'真实 HTML deck,可滚动跨页',
    url:'/od-home-preview/plugins/example-deck-guizang-editorial/example.html',
    prompt:'Open Design 年度营销规划 deck,归藏杂志风。',
    steps:['读取品牌内核','搭建编辑部网格','排版跨页','渲染 deck']}],
  video:[
-  {name:'发布片 · 3 镜头', sub:'视频 · HTML motion', icon:'/od-home-preview/home-redesign/icons/vfxcursor.webp', cap:'HTML motion,正在实时播放',
+  {name:'发布片 · 3 镜头', sub:'视频 · HTML motion', style:'动态字体', icon:'/od-home-preview/home-redesign/icons/vfxcursor.webp', cap:'HTML motion,正在实时播放',
    seq:['/od-home-preview/home-redesign/live/od-type-intro/index.html','/od-home-preview/home-redesign/live/od-glitch-title/index.html','/od-home-preview/home-redesign/live/od-logo-outro/index.html'],
    vw:1920, vh:1080,
    prompt:'Open Design 发布片,三个镜头:文字片头、故障标题、logo 收尾。',
    steps:['分镜:3 个场景','合成画面','制作文字动效','渲染序列']},
-  {name:'Bold Signal · 3 镜头', sub:'视频 · HTML motion', icon:'/od-home-preview/home-redesign/icons/boldsignal.webp', cap:'HTML motion,正在实时播放',
+  {name:'Bold Signal · 3 镜头', sub:'视频 · HTML motion', style:'Bold Signal', icon:'/od-home-preview/home-redesign/icons/boldsignal.webp', cap:'HTML motion,正在实时播放',
    seq:['/od-home-preview/home-redesign/live/frame-bold-signal/index.html','/od-home-preview/home-redesign/live/od-cinema-title/index.html','/od-home-preview/home-redesign/live/od-logo-outro/index.html'],
    vw:1920, vh:1080,
    prompt:'品牌色的 bold-signal 预告:signal 卡、电影标题、logo 收尾。',
@@ -170,7 +190,20 @@ var timers=[];
 
 function el(cls, html){var d=document.createElement('div');d.className=cls;d.innerHTML=html;return d;}
 
+function renderSysbar(){
+  var bar=document.getElementById('sysbar');
+  if(!bar) return;
+  bar.innerHTML='';
+  SCENES[scene].forEach(function(P,i){
+    var b=document.createElement('b');
+    b.textContent=P.style||P.name;
+    if(i===cur) b.className='on';
+    b.addEventListener('click',function(){ if(i!==cur) openProject(i); });
+    bar.appendChild(b);
+  });
+}
 function renderList(){
+  renderSysbar();
   plist.innerHTML='';
   SCENES[scene].forEach(function(P,i){
     var d=el('proj'+(i===cur?' on':''),

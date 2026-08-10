@@ -9,20 +9,7 @@
   --sans:'Albert Sans','PingFang SC','Microsoft YaHei',sans-serif}
 html,body{height:100%}
 body{font-family:var(--sans);background:#fafafa;display:flex;overflow:hidden;color:var(--ink);font-size:12px}
-.projects{width:176px;flex:none;background:#f4f4f1;border-right:1px solid var(--line);padding:12px 10px;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
-.projects .hd{display:flex;align-items:center;gap:7px;padding:0 4px 10px}
-.projects .hd img{width:18px;height:18px;border-radius:6px}
-.projects .hd b{font-size:11.5px;font-weight:800}
-.proj{display:flex;align-items:center;gap:8px;border-radius:8px;padding:8px;cursor:pointer;transition:.15s;border:1px solid transparent}
-.proj:hover{background:#fff}
-.proj.on{background:#fff;border-color:#15140f1a;box-shadow:0 6px 14px -10px rgba(0,0,0,.15)}
-.proj .ic{width:26px;height:26px;border-radius:6px;flex:none;background:var(--sw,#262626)}
-.proj .tx{min-width:0}
-.proj .tx b{display:block;font-size:10.5px;font-weight:750;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.proj .tx i{font-style:normal;font-size:8.5px;color:var(--mute);font-weight:650;white-space:nowrap}
-.proj.on .tx i{color:var(--grn)}
-.newp{margin-top:auto;border:1.5px dashed #15140f2b;border-radius:8px;padding:8px;text-align:center;font-size:10px;font-weight:750;color:#595959;cursor:pointer;flex:none}
-.chat{width:248px;flex:none;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column}
+.chat{width:288px;flex:none;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column}
 .chat .hd{display:flex;align-items:center;gap:7px;padding:12px 12px 8px;border-bottom:1px solid #f0f0ec}
 .chat .hd img{width:16px;height:16px;border-radius:6px}
 .chat .hd b{font-size:11.5px;font-weight:800}
@@ -83,15 +70,10 @@ body{font-family:var(--sans);background:#fafafa;display:flex;overflow:hidden;col
 #ebox .c1{left:-4px;top:-4px}#ebox .c2{right:-4px;top:-4px}#ebox .c3{left:-4px;bottom:-4px}#ebox .c4{right:-4px;bottom:-4px}
 #ebox .tag{position:absolute;left:-1px;top:-22px;background:var(--acid);color:#0d2601;font-family:var(--sans);
   font-size:9px;font-weight:800;border-radius:6px;padding:2px 8px;white-space:nowrap}
-@media (max-width:760px){.projects{display:none}.chat{width:220px}}
+@media (max-width:760px){.chat{width:220px}}
 @media (max-width:560px){.chat{display:none}}
 @media (prefers-reduced-motion: reduce){.artwrap,.skel::after{transition:none;animation:none}}
 </style></head><body>
-<div class="projects">
-  <div class="hd"><img src="/od-home-preview/android-chrome-192x192.png" alt=""><b>我的项目</b></div>
-  <div id="plist"></div>
-  <div class="newp">+ 新建项目</div>
-</div>
 <div class="chat">
   <div class="hd"><img src="/od-home-preview/android-chrome-192x192.png" alt=""><b>Open Design</b><i>Agent</i></div>
   <div class="log" id="log"></div>
@@ -116,29 +98,13 @@ var LOCALE = "zh";
 var SCENES = {"web":{"name":"营销官网","sub":"网页 · 落地页","prompt":"用我们的设计系统做一版发布落地页。","steps":["读取设计 token","排布首屏与卡片","撰写文案","渲染产物"]},"mobile":{"name":"产品 App","sub":"移动端 · 产品界面","prompt":"产品 App 首页，同一套设计系统。","steps":["读取设计 token","排布页面","搭建组件","渲染产物"]},"poster":{"name":"发布海报","sub":"营销 · 海报","prompt":"一张发布海报，字体层级来自品牌内核。","steps":["读取设计 token","构图主视觉","排版","渲染产物"]},"slides":{"name":"季度 Deck","sub":"演示 · 复盘","prompt":"季度复盘 Deck，保持品牌一致。","steps":["读取设计 token","梳理叙事","排布数据页","渲染产物"]}};
 var STR = {"ready":"✦ 产物已就绪，悬停文字可编辑。","hint":"✎ 点击画布开始交互","hint2":"✎ 悬停任意文字，点击即可编辑","reply":"这里是在线演示。<b>下载客户端去体验完整的功能</b>，真实生成、编辑、导出都在客户端里。","dl":"免费下载","capname":"由 token 渲染"};
 var SYSTEMS = [], scene = 'web', sysIndex = 0, timers = [];
-var plist = document.getElementById('plist'), log = document.getElementById('log');
+var log = document.getElementById('log');
 var inp = document.getElementById('inp'), send = document.getElementById('send');
 var skel = document.getElementById('skel'), aw = document.getElementById('aw');
 var art = document.getElementById('art'), cap = document.getElementById('capname');
 var ebox = document.getElementById('ebox'), etag = ebox.querySelector('.tag');
 
 function el(cls, html) { var d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; }
-
-/* Left rail = what you are making (scene); the chip row = which design
-   system it wears. Two axes, one control each. */
-function renderList() {
-  plist.innerHTML = '';
-  Object.keys(SCENES).forEach(function (key) {
-    var S = SCENES[key];
-    var d = el('proj' + (key === scene ? ' on' : ''),
-      '<span class="ic" style="background:' + SYSTEMS[sysIndex].accent + '"></span>' +
-      '<span class="tx"><b>' + S.name + '</b><i>' + S.sub + '</i></span>');
-    d.addEventListener('click', function () {
-      if (key !== scene) { selectScene(key); parent.postMessage({ odScene: key }, '*'); }
-    });
-    plist.appendChild(d);
-  });
-}
 
 function renderSysbar() {
   var bar = document.getElementById('sysbar');
@@ -187,8 +153,7 @@ function runTranscript() {
 }
 
 function selectSystem(i) {
-  sysIndex = i;
-  renderList(); renderSysbar(); hideBox();
+  sysIndex = i; renderSysbar(); hideBox();
   aw.classList.remove('in'); skel.classList.add('show');
   setTimeout(function () { paint(); skel.classList.remove('show'); aw.classList.add('in'); bindEditTracking(); }, 260);
   runTranscript();
@@ -196,7 +161,6 @@ function selectSystem(i) {
 
 function selectScene(next) {
   scene = next;
-  renderList();
   aw.classList.remove('in'); skel.classList.add('show');
   setTimeout(function () { paint(); skel.classList.remove('show'); aw.classList.add('in'); bindEditTracking(); }, 260);
   runTranscript();
@@ -260,7 +224,7 @@ window.addEventListener('message', function (e) {
 
 /* Wheel over the demo scrolls the host page unless a pane can still scroll. */
 document.addEventListener('wheel', function (e) {
-  var sc = e.target.closest ? e.target.closest('.log,.projects') : null;
+  var sc = e.target.closest ? e.target.closest('.log') : null;
   if (sc) {
     var can = sc.scrollHeight - sc.clientHeight > 4;
     var atTop = sc.scrollTop <= 0, atEnd = sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 2;
@@ -272,8 +236,7 @@ document.addEventListener('wheel', function (e) {
 fetch('/od-home-preview/home-redesign/design-systems.json')
   .then(function (r) { return r.json(); })
   .then(function (data) {
-    SYSTEMS = data;
-    renderList(); renderSysbar(); paint(); runTranscript();
+    SYSTEMS = data; renderSysbar(); paint(); runTranscript();
     aw.classList.add('in');
     bindEditTracking();
   })

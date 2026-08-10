@@ -50,6 +50,15 @@
         cta: 'Get a ticket',
         side: 'open-design.ai',
       },
+      video: {
+        shot: 'Shot 02 / 03',
+        kicker: 'Open Design',
+        title: 'EVERY SCENE.\nONE SYSTEM.',
+        sub: 'Launch film · 2026',
+        timecode: '00:04:18',
+        track: ['Type in', 'Logo wipe', 'End card'],
+        badge: 'REC',
+      },
       slides: {
         kicker: 'Q3 review',
         title: 'Where the brand\ngoes next',
@@ -100,6 +109,15 @@
         meta: [['9 月 12 日 周五', '19:00 入场'], ['5 号仓库', '上海'], ['免费', '需预约']],
         cta: '领取入场券',
         side: 'open-design.ai',
+      },
+      video: {
+        shot: '第 02 / 03 镜',
+        kicker: 'Open Design',
+        title: '所有场景。\n一套系统。',
+        sub: '发布短片 · 2026',
+        timecode: '00:04:18',
+        track: ['字幕入场', 'Logo 擦除', '尾板'],
+        badge: 'REC',
       },
       slides: {
         kicker: 'Q3 复盘',
@@ -333,7 +351,51 @@
     return root;
   }
 
-  var RENDER = { web: web, mobile: mobile, poster: poster, slides: slides };
+  /* Motion frame: a 16:9 title card that animates on render, plus the
+     timeline strip that makes it read as video rather than a still. */
+  function video(t) {
+    var root = el('div', 'af af-video');
+    var stage = el('div', 'af-frame');
+    var bar = el('div', 'af-frame-bar');
+    bar.appendChild(el('span', null, t.shot));
+    var rec = el('span', 'af-rec');
+    rec.appendChild(el('i', null, ''));
+    rec.appendChild(document.createTextNode(t.badge));
+    bar.appendChild(rec);
+    stage.appendChild(bar);
+
+    var center = el('div', 'af-frame-center');
+    center.appendChild(el('span', 'af-frame-kicker', t.kicker));
+    var h1 = el('h1', 'af-frame-title');
+    String(t.title).split('\n').forEach(function (line, i) {
+      var row = el('span', 'af-frame-line');
+      row.style.animationDelay = (0.12 + i * 0.16) + 's';
+      row.textContent = line;
+      h1.appendChild(row);
+    });
+    center.appendChild(h1);
+    center.appendChild(el('span', 'af-frame-wipe'));
+    center.appendChild(el('span', 'af-frame-sub', t.sub));
+    stage.appendChild(center);
+
+    var foot = el('div', 'af-frame-foot');
+    foot.appendChild(el('span', null, t.sub));
+    foot.appendChild(el('span', 'af-frame-tc', t.timecode));
+    stage.appendChild(foot);
+    root.appendChild(stage);
+
+    var track = el('div', 'af-track');
+    t.track.forEach(function (label, i) {
+      var cell = el('span', i === 1 ? 'on' : null);
+      cell.appendChild(el('i', null, ''));
+      cell.appendChild(el('u', null, label));
+      track.appendChild(cell);
+    });
+    root.appendChild(track);
+    return root;
+  }
+
+  var RENDER = { web: web, mobile: mobile, poster: poster, slides: slides, video: video };
 
   global.ODArtifacts = {
     /* Paint the scene's artifact into mount, in the demo's locale. */

@@ -339,6 +339,94 @@
   color: var(--ds-muted);
 }
 
+/* Motion frame ---------------------------------------------------------- */
+.af-video { background: var(--ds-surface); padding: 16px; gap: 10px; justify-content: center; }
+.af-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--ds-fg);
+  color: var(--ds-bg);
+  border-radius: var(--ds-radius);
+  overflow: hidden;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  transition: border-radius 0.3s ease;
+}
+.af-frame-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.af-rec { display: inline-flex; align-items: center; gap: 5px; }
+.af-rec i { width: 6px; height: 6px; border-radius: 999px; background: var(--ds-accent); animation: af-rec-blink 1.4s steps(1) infinite; }
+@keyframes af-rec-blink { 50% { opacity: 0.25; } }
+.af-frame-center { margin: auto 0; }
+.af-frame-kicker {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ds-accent);
+  margin-bottom: 8px;
+}
+.af-frame-title {
+  font-family: var(--ds-font-display);
+  font-size: 34px;
+  line-height: 1.02;
+  letter-spacing: var(--ds-tracking);
+  font-weight: 800;
+  margin: 0;
+  text-transform: uppercase;
+}
+/* Each line rises into place, the way a title sequence lands. */
+.af-frame-line { display: block; animation: af-line-in 0.6s cubic-bezier(0.23, 1, 0.32, 1) both; }
+@keyframes af-line-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.af-frame-wipe {
+  display: block;
+  height: 6px;
+  width: 46%;
+  margin: 14px 0 10px;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-accent);
+  transform-origin: left center;
+  animation: af-wipe 0.7s 0.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+@keyframes af-wipe { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.af-frame-sub { display: block; font-size: 11px; opacity: 0.75; }
+.af-frame-foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+.af-frame-tc { font-variant-numeric: tabular-nums; }
+/* Timeline strip: three shots, the middle one playing. */
+.af-track { display: flex; gap: 8px; }
+.af-track span { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.af-track i {
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ds-border);
+}
+.af-track span.on i { background: var(--ds-accent); }
+.af-track u {
+  text-decoration: none;
+  font-size: 9px;
+  color: var(--ds-muted);
+}
+.af-track span.on u { color: var(--ds-fg); font-weight: 700; }
+
 @media (prefers-reduced-motion: reduce) {
   .af, .af-btn, .af-panel, .af-phone, .af-sheet, .af-slide, .af-appcard, .af-slide-side { transition: none; }
+  .af-frame-line, .af-frame-wipe, .af-rec i { animation: none; }
 }

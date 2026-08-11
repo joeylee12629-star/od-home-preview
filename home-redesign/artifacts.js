@@ -51,13 +51,15 @@
         side: 'open-design.ai',
       },
       video: {
-        shot: 'Shot 02 / 03',
         kicker: 'Open Design',
-        title: 'EVERY SCENE.\nONE SYSTEM.',
         sub: 'Launch film · 2026',
-        timecode: '00:04:18',
-        track: ['Type in', 'Logo wipe', 'End card'],
         badge: 'REC',
+        track: ['Type in', 'Logo wipe', 'End card'],
+        shots: [
+          { timecode: '00:02:04', title: 'EVERY SCENE.\nONE SYSTEM.' },
+          { timecode: '00:04:18', wordmark: 'Open Design', tagline: 'The Vibe Design Workspace' },
+          { timecode: '00:06:22', title: 'START FREE', url: 'open-design.ai', cta: 'Download' },
+        ],
       },
       slides: {
         kicker: 'Q3 review',
@@ -111,13 +113,15 @@
         side: 'open-design.ai',
       },
       video: {
-        shot: '第 02 / 03 镜',
         kicker: 'Open Design',
-        title: '所有场景。\n一套系统。',
         sub: '发布短片 · 2026',
-        timecode: '00:04:18',
-        track: ['字幕入场', 'Logo 擦除', '尾板'],
         badge: 'REC',
+        track: ['字幕入场', 'Logo 擦除', '尾板'],
+        shots: [
+          { timecode: '00:02:04', title: '所有场景。\n一套系统。' },
+          { timecode: '00:04:18', wordmark: 'Open Design', tagline: 'Vibe Design Workspace' },
+          { timecode: '00:06:22', title: '免费开始', url: 'open-design.ai', cta: '下载' },
+        ],
       },
       slides: {
         kicker: 'Q3 复盘',
@@ -351,13 +355,19 @@
     return root;
   }
 
-  /* Motion frame: a 16:9 title card that animates on render, plus the
-     timeline strip that makes it read as video rather than a still. */
+  /*
+   * Motion frame: a three-shot title sequence. Each shot is its own
+   * composition (type in / logo wipe / end card) rendered from the same
+   * tokens; the film auto-advances and the timeline can be scrubbed, because
+   * a strip you cannot play is set dressing, not a video artifact.
+   */
   function video(t) {
     var root = el('div', 'af af-video');
     var stage = el('div', 'af-frame');
+
     var bar = el('div', 'af-frame-bar');
-    bar.appendChild(el('span', null, t.shot));
+    var shotLabel = el('span', null, '');
+    bar.appendChild(shotLabel);
     var rec = el('span', 'af-rec');
     rec.appendChild(el('i', null, ''));
     rec.appendChild(document.createTextNode(t.badge));
@@ -365,33 +375,97 @@
     stage.appendChild(bar);
 
     var center = el('div', 'af-frame-center');
-    center.appendChild(el('span', 'af-frame-kicker', t.kicker));
-    var h1 = el('h1', 'af-frame-title');
-    String(t.title).split('\n').forEach(function (line, i) {
-      var row = el('span', 'af-frame-line');
-      row.style.animationDelay = (0.12 + i * 0.16) + 's';
-      row.textContent = line;
-      h1.appendChild(row);
-    });
-    center.appendChild(h1);
-    center.appendChild(el('span', 'af-frame-wipe'));
-    center.appendChild(el('span', 'af-frame-sub', t.sub));
     stage.appendChild(center);
 
     var foot = el('div', 'af-frame-foot');
     foot.appendChild(el('span', null, t.sub));
-    foot.appendChild(el('span', 'af-frame-tc', t.timecode));
+    var tc = el('span', 'af-frame-tc', '');
+    foot.appendChild(tc);
     stage.appendChild(foot);
     root.appendChild(stage);
 
     var track = el('div', 'af-track');
-    t.track.forEach(function (label, i) {
-      var cell = el('span', i === 1 ? 'on' : null);
-      cell.appendChild(el('i', null, ''));
-      cell.appendChild(el('u', null, label));
+    var cells = t.track.map(function (label, i) {
+      var cell = el('span', null);
+      var fill = el('i', null, '');
+      fill.appendChild(el('u', 'af-track-fill', ''));
+      cell.appendChild(fill);
+      cell.appendChild(el('u', 'af-track-label', label));
+      cell.addEventListener('click', function () { play(i, true); });
       track.appendChild(cell);
+      return cell;
     });
     root.appendChild(track);
+
+    /* Shot 01: the type card. */
+    function shotType(shot) {
+      var wrap = el('div', 'af-shot');
+      wrap.appendChild(el('span', 'af-frame-kicker', t.kicker));
+      var h1 = el('h1', 'af-frame-title');
+      String(shot.title).split('\n').forEach(function (line, i) {
+        var row = el('span', 'af-frame-line');
+        row.style.animationDelay = (0.1 + i * 0.16) + 's';
+        row.textContent = line;
+        h1.appendChild(row);
+      });
+      wrap.appendChild(h1);
+      wrap.appendChild(el('span', 'af-frame-wipe'));
+      wrap.appendChild(el('span', 'af-frame-sub', t.sub));
+      return wrap;
+    }
+
+    /* Shot 02: the mark, revealed by an accent wipe. */
+    function shotLogo(shot) {
+      var wrap = el('div', 'af-shot af-shot-logo');
+      var mark = el('span', 'af-mark-badge');
+      mark.appendChild(el('i', null, ''));
+      wrap.appendChild(mark);
+      wrap.appendChild(el('b', 'af-wordmark', shot.wordmark));
+      wrap.appendChild(el('span', 'af-frame-sub', shot.tagline));
+      wrap.appendChild(el('span', 'af-wipe-sheet'));
+      return wrap;
+    }
+
+    /* Shot 03: the end card, on an accent field. */
+    function shotEnd(shot) {
+      var wrap = el('div', 'af-shot af-shot-end');
+      var h1 = el('h1', 'af-frame-title af-end-title');
+      h1.appendChild(el('span', 'af-frame-line', shot.title));
+      wrap.appendChild(h1);
+      var row = el('div', 'af-end-row');
+      row.appendChild(el('span', 'af-btn', shot.cta));
+      row.appendChild(el('span', 'af-end-url', shot.url));
+      wrap.appendChild(row);
+      return wrap;
+    }
+
+    var BUILD = [shotType, shotLogo, shotEnd];
+    var index = 0;
+    var timer = null;
+    var reduce = false;
+    try {
+      reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch (e) {}
+
+    function play(i, manual) {
+      index = i % BUILD.length;
+      var shot = t.shots[index];
+      center.innerHTML = '';
+      center.appendChild(BUILD[index](shot));
+      stage.classList.toggle('af-frame-accent', index === 2);
+      shotLabel.textContent = (index + 1 < 10 ? '0' : '') + (index + 1) + ' / 0' + BUILD.length;
+      tc.textContent = shot.timecode;
+      cells.forEach(function (cell, ci) {
+        cell.className = ci === index ? 'on' : ci < index ? 'done' : '';
+      });
+      if (timer) { clearTimeout(timer); timer = null; }
+      if (!reduce) {
+        timer = setTimeout(function () { play(index + 1, false); }, manual ? 4200 : 3400);
+        global.__odFilmTimer = timer;
+      }
+    }
+
+    play(0, false);
     return root;
   }
 
@@ -400,6 +474,11 @@
   global.ODArtifacts = {
     /* Paint the scene's artifact into mount, in the demo's locale. */
     render: function (mount, scene, locale) {
+      // A previous film keeps its own timer; stop it before repainting.
+      if (global.__odFilmTimer) {
+        clearTimeout(global.__odFilmTimer);
+        global.__odFilmTimer = null;
+      }
       var copy = (COPY[locale] || COPY.en)[scene] || COPY.en.web;
       var build = RENDER[scene] || RENDER.web;
       mount.innerHTML = '';
